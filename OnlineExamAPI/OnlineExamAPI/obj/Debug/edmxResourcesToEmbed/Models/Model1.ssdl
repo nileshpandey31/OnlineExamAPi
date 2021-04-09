@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OnlineExamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Admin">
+    <Key>
+      <PropertyRef Name="AdminId" />
+    </Key>
+    <Property Name="AdminId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="30" />
+    <Property Name="Password" Type="varchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="StudentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="30" />
+    <Property Name="Mobile" Type="varchar" MaxLength="20" />
+    <Property Name="Email" Type="varchar" MaxLength="40" />
+    <Property Name="DOB" Type="date" />
+    <Property Name="College" Type="varchar" MaxLength="20" />
+    <Property Name="City" Type="varchar" MaxLength="20" />
+    <Property Name="State" Type="varchar" MaxLength="20" />
+    <Property Name="Qualifacton" Type="varchar" MaxLength="20" />
+    <Property Name="YearOfCompletion" Type="varchar" MaxLength="20" />
+    <Property Name="Password" Type="varchar" MaxLength="20" />
+    <Property Name="LastLogin" Type="datetime" />
+  </EntityType>
+  <EntityType Name="TestFile">
+    <Key>
+      <PropertyRef Name="FileId" />
+    </Key>
+    <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Path" Type="varchar" MaxLength="30" />
+    <Property Name="Level" Type="int" />
+    <Property Name="SubjectId" Type="int" />
+  </EntityType>
+  <EntityType Name="TestSubject">
+    <Key>
+      <PropertyRef Name="SubjectId" />
+    </Key>
+    <Property Name="SubjectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Subject" Type="varchar" MaxLength="20" />
+    <Property Name="TotalMark" Type="int" />
+    <Property Name="PassingMark" Type="int" />
+    <Property Name="ExamDuration" Type="int" />
+    <Property Name="TStatus" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <Association Name="FK__TestFile__Subjec__300424B4">
+    <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
+    <End Role="TestFile" Type="Self.TestFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestSubject">
+        <PropertyRef Name="SubjectId" />
+      </Principal>
+      <Dependent Role="TestFile">
+        <PropertyRef Name="SubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="OnlineExamModelStoreContainer">
+    <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TestFile" EntityType="Self.TestFile" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TestSubject" EntityType="Self.TestSubject" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__TestFile__Subjec__300424B4" Association="Self.FK__TestFile__Subjec__300424B4">
+      <End Role="TestSubject" EntitySet="TestSubject" />
+      <End Role="TestFile" EntitySet="TestFile" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

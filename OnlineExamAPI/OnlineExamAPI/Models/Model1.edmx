@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="OnlineExamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="AdminId" />
+          </Key>
+          <Property Name="AdminId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="30" />
+          <Property Name="Password" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="30" />
+          <Property Name="Mobile" Type="varchar" MaxLength="20" />
+          <Property Name="Email" Type="varchar" MaxLength="40" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="College" Type="varchar" MaxLength="20" />
+          <Property Name="City" Type="varchar" MaxLength="20" />
+          <Property Name="State" Type="varchar" MaxLength="20" />
+          <Property Name="Qualifacton" Type="varchar" MaxLength="20" />
+          <Property Name="YearOfCompletion" Type="varchar" MaxLength="20" />
+          <Property Name="Password" Type="varchar" MaxLength="20" />
+          <Property Name="LastLogin" Type="datetime" />
+        </EntityType>
+        <EntityType Name="TestFile">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Path" Type="varchar" MaxLength="30" />
+          <Property Name="Level" Type="int" />
+          <Property Name="SubjectId" Type="int" />
+        </EntityType>
+        <EntityType Name="TestSubject">
+          <Key>
+            <PropertyRef Name="SubjectId" />
+          </Key>
+          <Property Name="SubjectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Subject" Type="varchar" MaxLength="20" />
+          <Property Name="TotalMark" Type="int" />
+          <Property Name="PassingMark" Type="int" />
+          <Property Name="ExamDuration" Type="int" />
+          <Property Name="TStatus" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <Association Name="FK__TestFile__Subjec__300424B4">
+          <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
+          <End Role="TestFile" Type="Self.TestFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestSubject">
+              <PropertyRef Name="SubjectId" />
+            </Principal>
+            <Dependent Role="TestFile">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="OnlineExamModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TestFile" EntityType="Self.TestFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TestSubject" EntityType="Self.TestSubject" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__TestFile__Subjec__300424B4" Association="Self.FK__TestFile__Subjec__300424B4">
+            <End Role="TestSubject" EntitySet="TestSubject" />
+            <End Role="TestFile" EntitySet="TestFile" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OnlineExamModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="AdminId" />
+          </Key>
+          <Property Name="AdminId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="College" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Qualifacton" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="YearOfCompletion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="TestFile">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Path" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Level" Type="Int32" />
+          <Property Name="SubjectId" Type="Int32" />
+          <NavigationProperty Name="TestSubject" Relationship="Self.FK__TestFile__Subjec__300424B4" FromRole="TestFile" ToRole="TestSubject" />
+        </EntityType>
+        <EntityType Name="TestSubject">
+          <Key>
+            <PropertyRef Name="SubjectId" />
+          </Key>
+          <Property Name="SubjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Subject" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TotalMark" Type="Int32" />
+          <Property Name="PassingMark" Type="Int32" />
+          <Property Name="ExamDuration" Type="Int32" />
+          <Property Name="TStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TestFiles" Relationship="Self.FK__TestFile__Subjec__300424B4" FromRole="TestSubject" ToRole="TestFile" />
+        </EntityType>
+        <Association Name="FK__TestFile__Subjec__300424B4">
+          <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
+          <End Role="TestFile" Type="Self.TestFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestSubject">
+              <PropertyRef Name="SubjectId" />
+            </Principal>
+            <Dependent Role="TestFile">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="OnlineExamEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admins" EntityType="Self.Admin" />
+          <EntitySet Name="Students" EntityType="Self.Student" />
+          <EntitySet Name="TestFiles" EntityType="Self.TestFile" />
+          <EntitySet Name="TestSubjects" EntityType="Self.TestSubject" />
+          <AssociationSet Name="FK__TestFile__Subjec__300424B4" Association="Self.FK__TestFile__Subjec__300424B4">
+            <End Role="TestSubject" EntitySet="TestSubjects" />
+            <End Role="TestFile" EntitySet="TestFiles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities">
+          <EntitySetMapping Name="Admins">
+            <EntityTypeMapping TypeName="OnlineExamModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="OnlineExamModel.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="College" ColumnName="College" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Qualifacton" ColumnName="Qualifacton" />
+                <ScalarProperty Name="YearOfCompletion" ColumnName="YearOfCompletion" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestFiles">
+            <EntityTypeMapping TypeName="OnlineExamModel.TestFile">
+              <MappingFragment StoreEntitySet="TestFile">
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestSubjects">
+            <EntityTypeMapping TypeName="OnlineExamModel.TestSubject">
+              <MappingFragment StoreEntitySet="TestSubject">
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+                <ScalarProperty Name="PassingMark" ColumnName="PassingMark" />
+                <ScalarProperty Name="ExamDuration" ColumnName="ExamDuration" />
+                <ScalarProperty Name="TStatus" ColumnName="TStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

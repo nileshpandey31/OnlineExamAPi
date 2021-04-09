@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities">
+    <EntitySetMapping Name="Admins">
+      <EntityTypeMapping TypeName="OnlineExamModel.Admin">
+        <MappingFragment StoreEntitySet="Admin">
+          <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Students">
+      <EntityTypeMapping TypeName="OnlineExamModel.Student">
+        <MappingFragment StoreEntitySet="Student">
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="College" ColumnName="College" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="Qualifacton" ColumnName="Qualifacton" />
+          <ScalarProperty Name="YearOfCompletion" ColumnName="YearOfCompletion" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TestFiles">
+      <EntityTypeMapping TypeName="OnlineExamModel.TestFile">
+        <MappingFragment StoreEntitySet="TestFile">
+          <ScalarProperty Name="FileId" ColumnName="FileId" />
+          <ScalarProperty Name="Path" ColumnName="Path" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+          <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TestSubjects">
+      <EntityTypeMapping TypeName="OnlineExamModel.TestSubject">
+        <MappingFragment StoreEntitySet="TestSubject">
+          <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+          <ScalarProperty Name="PassingMark" ColumnName="PassingMark" />
+          <ScalarProperty Name="ExamDuration" ColumnName="ExamDuration" />
+          <ScalarProperty Name="TStatus" ColumnName="TStatus" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

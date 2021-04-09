@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OnlineExamModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Admin">
+    <Key>
+      <PropertyRef Name="AdminId" />
+    </Key>
+    <Property Name="AdminId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="StudentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="DOB" Type="DateTime" Precision="0" />
+    <Property Name="College" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="City" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Qualifacton" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="YearOfCompletion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="LastLogin" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="TestFile">
+    <Key>
+      <PropertyRef Name="FileId" />
+    </Key>
+    <Property Name="FileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Path" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Level" Type="Int32" />
+    <Property Name="SubjectId" Type="Int32" />
+    <NavigationProperty Name="TestSubject" Relationship="Self.FK__TestFile__Subjec__300424B4" FromRole="TestFile" ToRole="TestSubject" />
+  </EntityType>
+  <EntityType Name="TestSubject">
+    <Key>
+      <PropertyRef Name="SubjectId" />
+    </Key>
+    <Property Name="SubjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Subject" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="TotalMark" Type="Int32" />
+    <Property Name="PassingMark" Type="Int32" />
+    <Property Name="ExamDuration" Type="Int32" />
+    <Property Name="TStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TestFiles" Relationship="Self.FK__TestFile__Subjec__300424B4" FromRole="TestSubject" ToRole="TestFile" />
+  </EntityType>
+  <Association Name="FK__TestFile__Subjec__300424B4">
+    <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
+    <End Role="TestFile" Type="Self.TestFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestSubject">
+        <PropertyRef Name="SubjectId" />
+      </Principal>
+      <Dependent Role="TestFile">
+        <PropertyRef Name="SubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="OnlineExamEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Admins" EntityType="Self.Admin" />
+    <EntitySet Name="Students" EntityType="Self.Student" />
+    <EntitySet Name="TestFiles" EntityType="Self.TestFile" />
+    <EntitySet Name="TestSubjects" EntityType="Self.TestSubject" />
+    <AssociationSet Name="FK__TestFile__Subjec__300424B4" Association="Self.FK__TestFile__Subjec__300424B4">
+      <End Role="TestSubject" EntitySet="TestSubjects" />
+      <End Role="TestFile" EntitySet="TestFiles" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
