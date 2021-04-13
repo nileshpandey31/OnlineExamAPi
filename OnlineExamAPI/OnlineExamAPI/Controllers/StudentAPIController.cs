@@ -10,6 +10,7 @@ using ExcelDataReader; //need to install first
 using System.IO;
 using OnlineExamAPI.Models;  // for database
 using System.Web.Http.Cors; //for enabling cors
+using System.Text;
 
 namespace OnlineExamAPI.Controllers
 {
@@ -26,15 +27,19 @@ namespace OnlineExamAPI.Controllers
     {
         OnlineExamEntities1 db = new OnlineExamEntities1();   //db instance
 
-        //method to insert student into student table
+        //method to insert student into student table with passwrd encryption
 
         [Route("api/StudentAPI/RegisterStudent")]
-        [HttpPost]                                      // post method for insertion
-        public bool Post([FromBody] Student stud)           //from body mandatory
+        [HttpPost]
+        public bool Post([FromBody] Student stud)
         {
             try
             {
-                db.Students.Add(stud);
+                // Console.WriteLine(stud.Password);
+
+                stud.Password = Convert.ToBase64String(System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(stud.Password)));
+                var result = db.Students.Add(stud);
+                // Console.WriteLine(stud.Password);
                 var res = db.SaveChanges();
                 if (res > 0)
                     return true;
@@ -56,8 +61,9 @@ namespace OnlineExamAPI.Controllers
             string result = "";
             try
             {
+                pwd = Convert.ToBase64String
+                    (System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(pwd)));
                 var data = db.Students.Where(x => x.Email == email && x.Password == pwd);
-                
                 if (data.Count() == 0)
                     result = "Invalid credentials";
                 else

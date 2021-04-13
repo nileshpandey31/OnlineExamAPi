@@ -37,7 +37,7 @@
     <Property Name="State" Type="varchar" MaxLength="20" />
     <Property Name="Qualifacton" Type="varchar" MaxLength="20" />
     <Property Name="YearOfCompletion" Type="varchar" MaxLength="20" />
-    <Property Name="Password" Type="varchar" MaxLength="20" />
+    <Property Name="Password" Type="varchar" MaxLength="50" />
     <Property Name="LastLogin" Type="datetime" />
   </EntityType>
   <EntityType Name="TestSubject">
