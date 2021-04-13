@@ -16,7 +16,7 @@ namespace OnlineExamAPI.Models
     {
         public TestSubject()
         {
-            this.TestFiles = new HashSet<TestFile>();
+            this.Questions = new HashSet<Question>();
         }
     
         public int SubjectId { get; set; }
@@ -26,6 +26,6 @@ namespace OnlineExamAPI.Models
         public Nullable<int> ExamDuration { get; set; }
         public string TStatus { get; set; }
     
-        public virtual ICollection<TestFile> TestFiles { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
     }
 }

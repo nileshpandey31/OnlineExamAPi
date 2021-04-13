@@ -12,11 +12,17 @@ namespace OnlineExamAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TestFile
+    public partial class Question
     {
-        public int FileId { get; set; }
-        public string Path { get; set; }
-        public Nullable<int> Level { get; set; }
+        public int QID { get; set; }
+        public string Qsn { get; set; }
+        public string Opt1 { get; set; }
+        public string Opt2 { get; set; }
+        public string Opt3 { get; set; }
+        public string Opt4 { get; set; }
+        public string Answer { get; set; }
+        public string Level { get; set; }
+        public string FileName { get; set; }
         public Nullable<int> SubjectId { get; set; }
     
         public virtual TestSubject TestSubject { get; set; }
