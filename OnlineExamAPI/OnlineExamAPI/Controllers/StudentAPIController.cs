@@ -11,6 +11,8 @@ using System.IO;
 using OnlineExamAPI.Models;  // for database
 using System.Web.Http.Cors; //for enabling cors
 using System.Text;
+using System.Net.Mail;
+using System.Runtime;
 
 namespace OnlineExamAPI.Controllers
 {
@@ -146,16 +148,15 @@ namespace OnlineExamAPI.Controllers
 
                     db.Questions.Add(objUser);
 
-                    }
+                }
 
 
-                    int output = db.SaveChanges();
+                int output = db.SaveChanges();
                     if (output > 0)
                     {
                         message = file.FileName + " Excel file has been successfully uploaded";
                       
-
-                }
+                    }
                     else
                     {
                         message = "Excel file uploaded has fiald";
@@ -245,6 +246,135 @@ namespace OnlineExamAPI.Controllers
             {
                 throw ex;
             }
+        }
+
+        [Route("api/StudentAPI/CheckEmail/{email}")]
+        [HttpGet]
+        public string Get(string email)
+        {
+            string result = "";
+            try
+            {
+                var data = db.Students.Where(x => x.Email == email).SingleOrDefault();
+                if (data != null)
+                {
+                    result = "success";
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+
+        [Route("api/StudentAPI/VerifyLinkEmail")]
+        [HttpPost]
+        public string post([FromBody] Student stud)
+        {
+            string result = "";
+            try
+            {
+                var data = db.Students.Where(x => x.Email == stud.Email).FirstOrDefault();
+                if (data == null)
+                    return result;
+                string OTP = GeneratePassword();
+                data.ActivetionCode = Guid.NewGuid();
+                data.OTP = OTP;
+                db.Entry(data).State = System.Data.EntityState.Modified;
+                var res = db.SaveChanges();
+                if (res > 0)
+                {
+                    ForgetPasswordEmailToUser(data.Email, data.ActivetionCode.ToString(), data.OTP);
+                    result = "success";
+                    return result;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public string GeneratePassword()                //Generates OTP for ForgotPassword
+        {
+            string OTPLength = "4";
+            string OTP = string.Empty;
+
+            string Chars = string.Empty;
+            Chars = "1,2,3,4,5,6,7,8,9,0";
+
+            char[] seplitChar = { ',' };
+            string[] arr = Chars.Split(seplitChar);
+            string NewOTP = "";
+            string temp = "";
+            Random rand = new Random();
+            for (int i = 0; i < Convert.ToInt32(OTPLength); i++)
+            {
+                temp = arr[rand.Next(0, arr.Length)];
+                NewOTP += temp;
+                OTP = NewOTP;
+            }
+            return OTP;
+        }
+
+        public void ForgetPasswordEmailToUser(string emailid, string activationCode, string OTP)
+        {
+
+            var GenarateUserVerificationLink = "//localhost:4200/PassReset/";
+
+            /*
+            var GenarateUserVerificationLink= "//localhost:4200/PassRest/" + activationCode;
+            string current_url = System.Web.HttpContext.Current.Request.Url.ToString();
+            var link = System.Web.HttpContext.Current.Request.Url.ToString().Replace(current_url,GenarateUserVerificationLink);*/
+
+            var link = GenarateUserVerificationLink;
+
+            var fromMail = new MailAddress("test962326@gmail.com", "testing"); //enter your mail id
+            var fromEmailpassword = "9921214432"; // Set your email password
+            var toEmail = new MailAddress(emailid);
+
+            var smtp = new SmtpClient();
+            smtp.UseDefaultCredentials = false;
+            smtp.EnableSsl = true;
+            smtp.Credentials = new NetworkCredential(fromMail.Address, fromEmailpassword);
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+            var Message = new MailMessage(fromMail, toEmail);
+            Message.Subject = "Password Reset-Demo";
+            Message.Body = "< br /> Please click on the below link for password change " + "<br/><a href=" + link + ">" + link + "</a>" +
+              "<br/> OTP for password change : " + OTP;
+            Message.IsBodyHtml = true;
+
+            smtp.Send(Message);
+        }
+
+        [Route("api/StudentAPI/SetNewPassword")]
+        [HttpPost]
+        public bool Put([FromBody] Student stud)
+        {
+            bool result = false;
+            try
+            {
+                string otp = stud.OTP; ;
+                string NewPass = stud.Password;
+
+                var res = db.sp_UpdatePassword(otp, NewPass);
+                if (res > 0)
+                {
+                    result = true;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
         }
 
 

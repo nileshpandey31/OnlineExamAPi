@@ -41,6 +41,19 @@
           <ScalarProperty Name="YearOfCompletion" ColumnName="YearOfCompletion" />
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+          <ScalarProperty Name="EmailVerification" ColumnName="EmailVerification" />
+          <ScalarProperty Name="OTP" ColumnName="OTP" />
+          <ScalarProperty Name="ActivetionCode" ColumnName="ActivetionCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TestFiles">
+      <EntityTypeMapping TypeName="OnlineExamModel.TestFile">
+        <MappingFragment StoreEntitySet="TestFile">
+          <ScalarProperty Name="FileId" ColumnName="FileId" />
+          <ScalarProperty Name="Path" ColumnName="Path" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+          <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -56,6 +69,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_UpdatePassword" FunctionName="OnlineExamModel.Store.sp_UpdatePassword" />
     <FunctionImportMapping FunctionImportName="fetchqusn" FunctionName="OnlineExamModel.Store.fetchqusn">
       <ResultMapping>
         <ComplexTypeMapping TypeName="OnlineExamModel.fetchqusn_Result">
