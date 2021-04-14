@@ -31,7 +31,21 @@ namespace OnlineExamAPI.Models
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<TestFile> TestFiles { get; set; }
         public DbSet<TestSubject> TestSubjects { get; set; }
+    
+        public virtual int sp_UpdatePassword(string otp, string password)
+        {
+            var otpParameter = otp != null ?
+                new ObjectParameter("otp", otp) :
+                new ObjectParameter("otp", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_UpdatePassword", otpParameter, passwordParameter);
+        }
     
         public virtual ObjectResult<fetchqusn_Result> fetchqusn()
         {

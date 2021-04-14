@@ -4,12 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8ef94c1b58be48d09d79f3477d6b4b95" Name="Diagram1">
+      <Diagram DiagramId="49325e978e634f5abc6b1dd5bdd520f5" Name="Diagram1">
         <EntityTypeShape EntityType="OnlineExamModel.Admin" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineExamModel.Question" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineExamModel.Student" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineExamModel.TestSubject" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
-        <AssociationConnector Association="OnlineExamModel.FK__Question__Subjec__403A8C7D" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="OnlineExamModel.Question" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineExamModel.Student" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineExamModel.TestFile" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineExamModel.TestSubject" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
+        <AssociationConnector Association="OnlineExamModel.FK__Question__Subjec__38996AB5" ManuallyRouted="false" />
+        <AssociationConnector Association="OnlineExamModel.FK__TestFile__Subjec__2C3393D0" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -26,5 +26,8 @@ namespace OnlineExamAPI.Models
         public string YearOfCompletion { get; set; }
         public string Password { get; set; }
         public Nullable<System.DateTime> LastLogin { get; set; }
+        public Nullable<bool> EmailVerification { get; set; }
+        public string OTP { get; set; }
+        public Nullable<System.Guid> ActivetionCode { get; set; }
     }
 }

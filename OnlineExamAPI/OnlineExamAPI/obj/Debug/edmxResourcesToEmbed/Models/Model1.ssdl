@@ -37,8 +37,20 @@
     <Property Name="State" Type="varchar" MaxLength="20" />
     <Property Name="Qualifacton" Type="varchar" MaxLength="20" />
     <Property Name="YearOfCompletion" Type="varchar" MaxLength="20" />
-    <Property Name="Password" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="varchar" MaxLength="20" />
     <Property Name="LastLogin" Type="datetime" />
+    <Property Name="EmailVerification" Type="bit" />
+    <Property Name="OTP" Type="nvarchar" MaxLength="4" />
+    <Property Name="ActivetionCode" Type="uniqueidentifier" />
+  </EntityType>
+  <EntityType Name="TestFile">
+    <Key>
+      <PropertyRef Name="FileId" />
+    </Key>
+    <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Path" Type="varchar" MaxLength="30" />
+    <Property Name="Level" Type="int" />
+    <Property Name="SubjectId" Type="int" />
   </EntityType>
   <EntityType Name="TestSubject">
     <Key>
@@ -51,7 +63,7 @@
     <Property Name="ExamDuration" Type="int" />
     <Property Name="TStatus" Type="varchar" MaxLength="20" />
   </EntityType>
-  <Association Name="FK__Question__Subjec__403A8C7D">
+  <Association Name="FK__Question__Subjec__38996AB5">
     <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
     <End Role="Question" Type="Self.Question" Multiplicity="*" />
     <ReferentialConstraint>
@@ -63,15 +75,36 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK__TestFile__Subjec__2C3393D0">
+    <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
+    <End Role="TestFile" Type="Self.TestFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestSubject">
+        <PropertyRef Name="SubjectId" />
+      </Principal>
+      <Dependent Role="TestFile">
+        <PropertyRef Name="SubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Function Name="fetchqusn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_UpdatePassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="otp" Type="varchar" Mode="In" />
+    <Parameter Name="Password" Type="varchar" Mode="In" />
+  </Function>
   <EntityContainer Name="OnlineExamModelStoreContainer">
     <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TestFile" EntityType="Self.TestFile" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TestSubject" EntityType="Self.TestSubject" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK__Question__Subjec__403A8C7D" Association="Self.FK__Question__Subjec__403A8C7D">
+    <AssociationSet Name="FK__Question__Subjec__38996AB5" Association="Self.FK__Question__Subjec__38996AB5">
       <End Role="TestSubject" EntitySet="TestSubject" />
       <End Role="Question" EntitySet="Question" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TestFile__Subjec__2C3393D0" Association="Self.FK__TestFile__Subjec__2C3393D0">
+      <End Role="TestSubject" EntitySet="TestSubject" />
+      <End Role="TestFile" EntitySet="TestFile" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

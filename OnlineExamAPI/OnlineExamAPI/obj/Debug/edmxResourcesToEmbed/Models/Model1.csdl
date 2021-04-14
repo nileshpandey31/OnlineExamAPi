@@ -22,7 +22,7 @@
     <Property Name="Level" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
     <Property Name="FileName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
     <Property Name="SubjectId" Type="Int32" />
-    <NavigationProperty Name="TestSubject" Relationship="Self.FK__Question__Subjec__403A8C7D" FromRole="Question" ToRole="TestSubject" />
+    <NavigationProperty Name="TestSubject" Relationship="Self.FK__Question__Subjec__38996AB5" FromRole="Question" ToRole="TestSubject" />
   </EntityType>
   <EntityType Name="Student">
     <Key>
@@ -38,8 +38,21 @@
     <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Qualifacton" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="YearOfCompletion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="LastLogin" Type="DateTime" Precision="3" />
+    <Property Name="EmailVerification" Type="Boolean" />
+    <Property Name="OTP" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+    <Property Name="ActivetionCode" Type="Guid" />
+  </EntityType>
+  <EntityType Name="TestFile">
+    <Key>
+      <PropertyRef Name="FileId" />
+    </Key>
+    <Property Name="FileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Path" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Level" Type="Int32" />
+    <Property Name="SubjectId" Type="Int32" />
+    <NavigationProperty Name="TestSubject" Relationship="Self.FK__TestFile__Subjec__2C3393D0" FromRole="TestFile" ToRole="TestSubject" />
   </EntityType>
   <EntityType Name="TestSubject">
     <Key>
@@ -51,9 +64,10 @@
     <Property Name="PassingMark" Type="Int32" />
     <Property Name="ExamDuration" Type="Int32" />
     <Property Name="TStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Questions" Relationship="Self.FK__Question__Subjec__403A8C7D" FromRole="TestSubject" ToRole="Question" />
+    <NavigationProperty Name="Questions" Relationship="Self.FK__Question__Subjec__38996AB5" FromRole="TestSubject" ToRole="Question" />
+    <NavigationProperty Name="TestFiles" Relationship="Self.FK__TestFile__Subjec__2C3393D0" FromRole="TestSubject" ToRole="TestFile" />
   </EntityType>
-  <Association Name="FK__Question__Subjec__403A8C7D">
+  <Association Name="FK__Question__Subjec__38996AB5">
     <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
     <End Role="Question" Type="Self.Question" Multiplicity="*" />
     <ReferentialConstraint>
@@ -65,15 +79,36 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK__TestFile__Subjec__2C3393D0">
+    <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
+    <End Role="TestFile" Type="Self.TestFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestSubject">
+        <PropertyRef Name="SubjectId" />
+      </Principal>
+      <Dependent Role="TestFile">
+        <PropertyRef Name="SubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="OnlineExamEntities2" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Admins" EntityType="Self.Admin" />
     <EntitySet Name="Questions" EntityType="Self.Question" />
     <EntitySet Name="Students" EntityType="Self.Student" />
+    <EntitySet Name="TestFiles" EntityType="Self.TestFile" />
     <EntitySet Name="TestSubjects" EntityType="Self.TestSubject" />
-    <AssociationSet Name="FK__Question__Subjec__403A8C7D" Association="Self.FK__Question__Subjec__403A8C7D">
+    <AssociationSet Name="FK__Question__Subjec__38996AB5" Association="Self.FK__Question__Subjec__38996AB5">
       <End Role="TestSubject" EntitySet="TestSubjects" />
       <End Role="Question" EntitySet="Questions" />
     </AssociationSet>
+    <AssociationSet Name="FK__TestFile__Subjec__2C3393D0" Association="Self.FK__TestFile__Subjec__2C3393D0">
+      <End Role="TestSubject" EntitySet="TestSubjects" />
+      <End Role="TestFile" EntitySet="TestFiles" />
+    </AssociationSet>
+    <FunctionImport Name="sp_UpdatePassword">
+      <Parameter Name="otp" Mode="In" Type="String" />
+      <Parameter Name="Password" Mode="In" Type="String" />
+    </FunctionImport>
     <FunctionImport Name="fetchqusn" ReturnType="Collection(OnlineExamModel.fetchqusn_Result)" />
   </EntityContainer>
   <ComplexType Name="fetchqusn_Result">
