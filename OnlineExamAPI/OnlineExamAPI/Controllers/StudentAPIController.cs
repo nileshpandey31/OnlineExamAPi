@@ -25,7 +25,7 @@ namespace OnlineExamAPI.Controllers
     
     public class StudentAPIController : ApiController
     {
-        OnlineExamEntities1 db = new OnlineExamEntities1();   //db instance
+        OnlineExamEntities2 db = new OnlineExamEntities2();   //db instance
 
         //method to insert student into student table with passwrd encryption
 
@@ -141,7 +141,9 @@ namespace OnlineExamAPI.Controllers
                         objUser.Level= finalRecords.Rows[i][6].ToString();
                     objUser.FileName = file.FileName;           // fetch the name of file uploaded with extenson
                         objUser.SubjectId =GlobalText.sid;
-                   
+                    
+
+
                     db.Questions.Add(objUser);
 
                     }
@@ -222,6 +224,22 @@ namespace OnlineExamAPI.Controllers
             {
                 var data = db.TestSubjects.ToList();
                 return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [Route("api/StudentAPI/ShowQst")]
+        [HttpGet]
+
+        public IEnumerable<fetchqusn_Result> ShowQt()      // will return list of Quesn object
+        {
+            try
+            {
+                var Qsn = db.fetchqusn();
+                return Qsn;
             }
             catch (Exception ex)
             {

@@ -65,7 +65,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="OnlineExamEntities1" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="OnlineExamEntities2" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Admins" EntityType="Self.Admin" />
     <EntitySet Name="Questions" EntityType="Self.Question" />
     <EntitySet Name="Students" EntityType="Self.Student" />
@@ -74,5 +74,18 @@
       <End Role="TestSubject" EntitySet="TestSubjects" />
       <End Role="Question" EntitySet="Questions" />
     </AssociationSet>
+    <FunctionImport Name="fetchqusn" ReturnType="Collection(OnlineExamModel.fetchqusn_Result)" />
   </EntityContainer>
+  <ComplexType Name="fetchqusn_Result">
+    <Property Type="Int32" Name="QID" Nullable="false" />
+    <Property Type="String" Name="Qsn" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Opt1" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Opt2" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Opt3" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Opt4" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Answer" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Level" Nullable="true" MaxLength="5" />
+    <Property Type="String" Name="FileName" Nullable="true" MaxLength="30" />
+    <Property Type="Int32" Name="SubjectId" Nullable="true" />
+  </ComplexType>
 </Schema>

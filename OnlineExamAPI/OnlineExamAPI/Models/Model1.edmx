@@ -68,6 +68,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fetchqusn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="OnlineExamModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
@@ -147,7 +148,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="OnlineExamEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="OnlineExamEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admins" EntityType="Self.Admin" />
           <EntitySet Name="Questions" EntityType="Self.Question" />
           <EntitySet Name="Students" EntityType="Self.Student" />
@@ -156,13 +157,26 @@
             <End Role="TestSubject" EntitySet="TestSubjects" />
             <End Role="Question" EntitySet="Questions" />
           </AssociationSet>
+          <FunctionImport Name="fetchqusn" ReturnType="Collection(OnlineExamModel.fetchqusn_Result)" />
         </EntityContainer>
+        <ComplexType Name="fetchqusn_Result">
+          <Property Type="Int32" Name="QID" Nullable="false" />
+          <Property Type="String" Name="Qsn" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Opt1" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Opt2" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Opt3" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Opt4" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Answer" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Level" Nullable="true" MaxLength="5" />
+          <Property Type="String" Name="FileName" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="SubjectId" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities1">
+        <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities2">
           <EntitySetMapping Name="Admins">
             <EntityTypeMapping TypeName="OnlineExamModel.Admin">
               <MappingFragment StoreEntitySet="Admin">
@@ -218,6 +232,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="fetchqusn" FunctionName="OnlineExamModel.Store.fetchqusn">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineExamModel.fetchqusn_Result">
+                <ScalarProperty Name="QID" ColumnName="QID" />
+                <ScalarProperty Name="Qsn" ColumnName="Qsn" />
+                <ScalarProperty Name="Opt1" ColumnName="Opt1" />
+                <ScalarProperty Name="Opt2" ColumnName="Opt2" />
+                <ScalarProperty Name="Opt3" ColumnName="Opt3" />
+                <ScalarProperty Name="Opt4" ColumnName="Opt4" />
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
