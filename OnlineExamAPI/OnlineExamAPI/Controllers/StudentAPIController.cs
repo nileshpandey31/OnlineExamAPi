@@ -361,7 +361,7 @@ namespace OnlineExamAPI.Controllers
             try
             {
                 string otp = stud.OTP; ;
-                string NewPass = stud.Password;
+                string NewPass = Convert.ToBase64String(System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(stud.Password))); 
 
                 var res = db.sp_UpdatePassword(otp, NewPass);
                 if (res > 0)

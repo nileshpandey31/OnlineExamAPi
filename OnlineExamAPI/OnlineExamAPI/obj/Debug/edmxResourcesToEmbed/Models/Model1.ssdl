@@ -37,10 +37,10 @@
     <Property Name="State" Type="varchar" MaxLength="20" />
     <Property Name="Qualifacton" Type="varchar" MaxLength="20" />
     <Property Name="YearOfCompletion" Type="varchar" MaxLength="20" />
-    <Property Name="Password" Type="varchar" MaxLength="20" />
+    <Property Name="Password" Type="varchar" MaxLength="50" />
     <Property Name="LastLogin" Type="datetime" />
     <Property Name="EmailVerification" Type="bit" />
-    <Property Name="OTP" Type="nvarchar" MaxLength="4" />
+    <Property Name="OTP" Type="nvarchar" MaxLength="20" />
     <Property Name="ActivetionCode" Type="uniqueidentifier" />
   </EntityType>
   <EntityType Name="TestFile">
