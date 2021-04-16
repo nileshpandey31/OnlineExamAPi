@@ -1,12 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities2">
+  <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities12">
     <EntitySetMapping Name="Admins">
       <EntityTypeMapping TypeName="OnlineExamModel.Admin">
         <MappingFragment StoreEntitySet="Admin">
           <ScalarProperty Name="AdminId" ColumnName="AdminId" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LevelTables">
+      <EntityTypeMapping TypeName="OnlineExamModel.LevelTable">
+        <MappingFragment StoreEntitySet="LevelTable">
+          <ScalarProperty Name="Lid" ColumnName="Lid" />
+          <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -26,6 +36,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ReportCards">
+      <EntityTypeMapping TypeName="OnlineExamModel.ReportCard">
+        <MappingFragment StoreEntitySet="ReportCard">
+          <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+          <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+          <ScalarProperty Name="Marks" ColumnName="Marks" />
+          <ScalarProperty Name="RStatus" ColumnName="RStatus" />
+          <ScalarProperty Name="ExamDate" ColumnName="ExamDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Students">
       <EntityTypeMapping TypeName="OnlineExamModel.Student">
         <MappingFragment StoreEntitySet="Student">
@@ -41,19 +63,8 @@
           <ScalarProperty Name="YearOfCompletion" ColumnName="YearOfCompletion" />
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
-          <ScalarProperty Name="EmailVerification" ColumnName="EmailVerification" />
           <ScalarProperty Name="OTP" ColumnName="OTP" />
           <ScalarProperty Name="ActivetionCode" ColumnName="ActivetionCode" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TestFiles">
-      <EntityTypeMapping TypeName="OnlineExamModel.TestFile">
-        <MappingFragment StoreEntitySet="TestFile">
-          <ScalarProperty Name="FileId" ColumnName="FileId" />
-          <ScalarProperty Name="Path" ColumnName="Path" />
-          <ScalarProperty Name="Level" ColumnName="Level" />
-          <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -69,7 +80,36 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="sp_UpdatePassword" FunctionName="OnlineExamModel.Store.sp_UpdatePassword" />
+    <FunctionImportMapping FunctionImportName="fectchStudent" FunctionName="OnlineExamModel.Store.fectchStudent">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OnlineExamModel.fectchStudent_Result">
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="College" ColumnName="College" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="Qualifacton" ColumnName="Qualifacton" />
+          <ScalarProperty Name="YearOfCompletion" ColumnName="YearOfCompletion" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+          <ScalarProperty Name="OTP" ColumnName="OTP" />
+          <ScalarProperty Name="ActivetionCode" ColumnName="ActivetionCode" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="fetchLevel" FunctionName="OnlineExamModel.Store.fetchLevel">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OnlineExamModel.fetchLevel_Result">
+          <ScalarProperty Name="Lid" ColumnName="Lid" />
+          <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="fetchqusn" FunctionName="OnlineExamModel.Store.fetchqusn">
       <ResultMapping>
         <ComplexTypeMapping TypeName="OnlineExamModel.fetchqusn_Result">
@@ -86,5 +126,19 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="fetchSubject" FunctionName="OnlineExamModel.Store.fetchSubject">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OnlineExamModel.fetchSubject_Result">
+          <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+          <ScalarProperty Name="PassingMark" ColumnName="PassingMark" />
+          <ScalarProperty Name="ExamDuration" ColumnName="ExamDuration" />
+          <ScalarProperty Name="TStatus" ColumnName="TStatus" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_UpdateLevel" FunctionName="OnlineExamModel.Store.sp_UpdateLevel" />
+    <FunctionImportMapping FunctionImportName="sp_UpdatePassword" FunctionName="OnlineExamModel.Store.sp_UpdatePassword" />
   </EntityContainerMapping>
 </Mapping>

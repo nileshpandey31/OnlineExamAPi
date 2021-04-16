@@ -10,18 +10,16 @@
 namespace OnlineExamAPI.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class fetchqusn_Result
+    public partial class LevelTable
     {
-        public int QID { get; set; }
-        public string Qsn { get; set; }
-        public string Opt1 { get; set; }
-        public string Opt2 { get; set; }
-        public string Opt3 { get; set; }
-        public string Opt4 { get; set; }
-        public string Answer { get; set; }
-        public Nullable<int> Level { get; set; }
-        public string FileName { get; set; }
+        public int Lid { get; set; }
         public Nullable<int> SubjectId { get; set; }
+        public Nullable<int> StudentId { get; set; }
+        public Nullable<int> Level { get; set; }
+    
+        public virtual Student Student { get; set; }
+        public virtual TestSubject TestSubject { get; set; }
     }
 }

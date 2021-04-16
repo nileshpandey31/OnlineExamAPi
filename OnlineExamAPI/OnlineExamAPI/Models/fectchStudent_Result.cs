@@ -10,16 +10,9 @@
 namespace OnlineExamAPI.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Student
+    public partial class fectchStudent_Result
     {
-        public Student()
-        {
-            this.LevelTables = new HashSet<LevelTable>();
-            this.ReportCards = new HashSet<ReportCard>();
-        }
-    
         public int StudentId { get; set; }
         public string Name { get; set; }
         public string Mobile { get; set; }
@@ -34,8 +27,5 @@ namespace OnlineExamAPI.Models
         public Nullable<System.DateTime> LastLogin { get; set; }
         public string OTP { get; set; }
         public Nullable<System.Guid> ActivetionCode { get; set; }
-    
-        public virtual ICollection<LevelTable> LevelTables { get; set; }
-        public virtual ICollection<ReportCard> ReportCards { get; set; }
     }
 }

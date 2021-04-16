@@ -10,26 +10,14 @@
 namespace OnlineExamAPI.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class TestSubject
+    public partial class fetchSubject_Result
     {
-        public TestSubject()
-        {
-            this.LevelTables = new HashSet<LevelTable>();
-            this.Questions = new HashSet<Question>();
-            this.ReportCards = new HashSet<ReportCard>();
-        }
-    
         public int SubjectId { get; set; }
         public string Subject { get; set; }
         public Nullable<int> TotalMark { get; set; }
         public Nullable<int> PassingMark { get; set; }
         public Nullable<int> ExamDuration { get; set; }
         public string TStatus { get; set; }
-    
-        public virtual ICollection<LevelTable> LevelTables { get; set; }
-        public virtual ICollection<Question> Questions { get; set; }
-        public virtual ICollection<ReportCard> ReportCards { get; set; }
     }
 }

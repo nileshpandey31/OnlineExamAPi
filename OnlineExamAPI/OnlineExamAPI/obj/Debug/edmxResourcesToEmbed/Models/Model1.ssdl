@@ -8,6 +8,15 @@
     <Property Name="Email" Type="varchar" MaxLength="30" />
     <Property Name="Password" Type="varchar" MaxLength="30" />
   </EntityType>
+  <EntityType Name="LevelTable">
+    <Key>
+      <PropertyRef Name="Lid" />
+    </Key>
+    <Property Name="Lid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SubjectId" Type="int" />
+    <Property Name="StudentId" Type="int" />
+    <Property Name="Level" Type="int" />
+  </EntityType>
   <EntityType Name="Question">
     <Key>
       <PropertyRef Name="QID" />
@@ -19,9 +28,20 @@
     <Property Name="Opt3" Type="varchar" MaxLength="200" />
     <Property Name="Opt4" Type="varchar" MaxLength="200" />
     <Property Name="Answer" Type="varchar" MaxLength="200" />
-    <Property Name="Level" Type="varchar" MaxLength="5" />
+    <Property Name="Level" Type="int" />
     <Property Name="FileName" Type="varchar" MaxLength="30" />
     <Property Name="SubjectId" Type="int" />
+  </EntityType>
+  <EntityType Name="ReportCard">
+    <Key>
+      <PropertyRef Name="ReportId" />
+    </Key>
+    <Property Name="ReportId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StudentId" Type="int" />
+    <Property Name="SubjectID" Type="int" />
+    <Property Name="Marks" Type="int" />
+    <Property Name="RStatus" Type="varchar" MaxLength="20" />
+    <Property Name="ExamDate" Type="datetime" />
   </EntityType>
   <EntityType Name="Student">
     <Key>
@@ -37,20 +57,10 @@
     <Property Name="State" Type="varchar" MaxLength="20" />
     <Property Name="Qualifacton" Type="varchar" MaxLength="20" />
     <Property Name="YearOfCompletion" Type="varchar" MaxLength="20" />
-    <Property Name="Password" Type="varchar" MaxLength="20" />
+    <Property Name="Password" Type="varchar" MaxLength="100" />
     <Property Name="LastLogin" Type="datetime" />
-    <Property Name="EmailVerification" Type="bit" />
-    <Property Name="OTP" Type="nvarchar" MaxLength="4" />
+    <Property Name="OTP" Type="nvarchar" MaxLength="20" />
     <Property Name="ActivetionCode" Type="uniqueidentifier" />
-  </EntityType>
-  <EntityType Name="TestFile">
-    <Key>
-      <PropertyRef Name="FileId" />
-    </Key>
-    <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Path" Type="varchar" MaxLength="30" />
-    <Property Name="Level" Type="int" />
-    <Property Name="SubjectId" Type="int" />
   </EntityType>
   <EntityType Name="TestSubject">
     <Key>
@@ -63,7 +73,31 @@
     <Property Name="ExamDuration" Type="int" />
     <Property Name="TStatus" Type="varchar" MaxLength="20" />
   </EntityType>
-  <Association Name="FK__Question__Subjec__38996AB5">
+  <Association Name="FK__LevelTabl__Stude__72C60C4A">
+    <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+    <End Role="LevelTable" Type="Self.LevelTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="StudentId" />
+      </Principal>
+      <Dependent Role="LevelTable">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LevelTabl__Subje__71D1E811">
+    <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
+    <End Role="LevelTable" Type="Self.LevelTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestSubject">
+        <PropertyRef Name="SubjectId" />
+      </Principal>
+      <Dependent Role="LevelTable">
+        <PropertyRef Name="SubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Question__Subjec__403A8C7D">
     <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
     <End Role="Question" Type="Self.Question" Multiplicity="*" />
     <ReferentialConstraint>
@@ -75,36 +109,68 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__TestFile__Subjec__2C3393D0">
+  <Association Name="FK__ReportCar__Stude__6383C8BA">
+    <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+    <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="StudentId" />
+      </Principal>
+      <Dependent Role="ReportCard">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ReportCar__Subje__6477ECF3">
     <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
-    <End Role="TestFile" Type="Self.TestFile" Multiplicity="*" />
+    <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="TestSubject">
         <PropertyRef Name="SubjectId" />
       </Principal>
-      <Dependent Role="TestFile">
-        <PropertyRef Name="SubjectId" />
+      <Dependent Role="ReportCard">
+        <PropertyRef Name="SubjectID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="fectchStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="fetchLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="fetchqusn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="fetchSubject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_UpdateLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Lid" Type="int" Mode="In" />
+    <Parameter Name="Level" Type="int" Mode="In" />
+  </Function>
   <Function Name="sp_UpdatePassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="otp" Type="varchar" Mode="In" />
     <Parameter Name="Password" Type="varchar" Mode="In" />
   </Function>
   <EntityContainer Name="OnlineExamModelStoreContainer">
     <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LevelTable" EntityType="Self.LevelTable" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ReportCard" EntityType="Self.ReportCard" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="TestFile" EntityType="Self.TestFile" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TestSubject" EntityType="Self.TestSubject" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK__Question__Subjec__38996AB5" Association="Self.FK__Question__Subjec__38996AB5">
+    <AssociationSet Name="FK__LevelTabl__Stude__72C60C4A" Association="Self.FK__LevelTabl__Stude__72C60C4A">
+      <End Role="Student" EntitySet="Student" />
+      <End Role="LevelTable" EntitySet="LevelTable" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LevelTabl__Subje__71D1E811" Association="Self.FK__LevelTabl__Subje__71D1E811">
+      <End Role="TestSubject" EntitySet="TestSubject" />
+      <End Role="LevelTable" EntitySet="LevelTable" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Question__Subjec__403A8C7D" Association="Self.FK__Question__Subjec__403A8C7D">
       <End Role="TestSubject" EntitySet="TestSubject" />
       <End Role="Question" EntitySet="Question" />
     </AssociationSet>
-    <AssociationSet Name="FK__TestFile__Subjec__2C3393D0" Association="Self.FK__TestFile__Subjec__2C3393D0">
+    <AssociationSet Name="FK__ReportCar__Stude__6383C8BA" Association="Self.FK__ReportCar__Stude__6383C8BA">
+      <End Role="Student" EntitySet="Student" />
+      <End Role="ReportCard" EntitySet="ReportCard" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ReportCar__Subje__6477ECF3" Association="Self.FK__ReportCar__Subje__6477ECF3">
       <End Role="TestSubject" EntitySet="TestSubject" />
-      <End Role="TestFile" EntitySet="TestFile" />
+      <End Role="ReportCard" EntitySet="ReportCard" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

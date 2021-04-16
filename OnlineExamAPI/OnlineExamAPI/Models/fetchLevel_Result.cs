@@ -10,15 +10,12 @@
 namespace OnlineExamAPI.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class TestFile
+    public partial class fetchLevel_Result
     {
-        public int FileId { get; set; }
-        public string Path { get; set; }
-        public Nullable<int> Level { get; set; }
+        public int Lid { get; set; }
         public Nullable<int> SubjectId { get; set; }
-    
-        public virtual TestSubject TestSubject { get; set; }
+        public Nullable<int> StudentId { get; set; }
+        public Nullable<int> Level { get; set; }
     }
 }

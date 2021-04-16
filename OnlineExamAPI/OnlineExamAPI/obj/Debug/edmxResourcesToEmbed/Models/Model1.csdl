@@ -8,6 +8,17 @@
     <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
     <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
   </EntityType>
+  <EntityType Name="LevelTable">
+    <Key>
+      <PropertyRef Name="Lid" />
+    </Key>
+    <Property Name="Lid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SubjectId" Type="Int32" />
+    <Property Name="StudentId" Type="Int32" />
+    <Property Name="Level" Type="Int32" />
+    <NavigationProperty Name="Student" Relationship="Self.FK__LevelTabl__Stude__72C60C4A" FromRole="LevelTable" ToRole="Student" />
+    <NavigationProperty Name="TestSubject" Relationship="Self.FK__LevelTabl__Subje__71D1E811" FromRole="LevelTable" ToRole="TestSubject" />
+  </EntityType>
   <EntityType Name="Question">
     <Key>
       <PropertyRef Name="QID" />
@@ -19,10 +30,23 @@
     <Property Name="Opt3" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="Opt4" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="Answer" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="Level" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Level" Type="Int32" />
     <Property Name="FileName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
     <Property Name="SubjectId" Type="Int32" />
-    <NavigationProperty Name="TestSubject" Relationship="Self.FK__Question__Subjec__38996AB5" FromRole="Question" ToRole="TestSubject" />
+    <NavigationProperty Name="TestSubject" Relationship="Self.FK__Question__Subjec__403A8C7D" FromRole="Question" ToRole="TestSubject" />
+  </EntityType>
+  <EntityType Name="ReportCard">
+    <Key>
+      <PropertyRef Name="ReportId" />
+    </Key>
+    <Property Name="ReportId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StudentId" Type="Int32" />
+    <Property Name="SubjectID" Type="Int32" />
+    <Property Name="Marks" Type="Int32" />
+    <Property Name="RStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ExamDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Student" Relationship="Self.FK__ReportCar__Stude__6383C8BA" FromRole="ReportCard" ToRole="Student" />
+    <NavigationProperty Name="TestSubject" Relationship="Self.FK__ReportCar__Subje__6477ECF3" FromRole="ReportCard" ToRole="TestSubject" />
   </EntityType>
   <EntityType Name="Student">
     <Key>
@@ -38,21 +62,12 @@
     <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Qualifacton" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="YearOfCompletion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="LastLogin" Type="DateTime" Precision="3" />
-    <Property Name="EmailVerification" Type="Boolean" />
-    <Property Name="OTP" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+    <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="ActivetionCode" Type="Guid" />
-  </EntityType>
-  <EntityType Name="TestFile">
-    <Key>
-      <PropertyRef Name="FileId" />
-    </Key>
-    <Property Name="FileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Path" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Level" Type="Int32" />
-    <Property Name="SubjectId" Type="Int32" />
-    <NavigationProperty Name="TestSubject" Relationship="Self.FK__TestFile__Subjec__2C3393D0" FromRole="TestFile" ToRole="TestSubject" />
+    <NavigationProperty Name="LevelTables" Relationship="Self.FK__LevelTabl__Stude__72C60C4A" FromRole="Student" ToRole="LevelTable" />
+    <NavigationProperty Name="ReportCards" Relationship="Self.FK__ReportCar__Stude__6383C8BA" FromRole="Student" ToRole="ReportCard" />
   </EntityType>
   <EntityType Name="TestSubject">
     <Key>
@@ -64,10 +79,35 @@
     <Property Name="PassingMark" Type="Int32" />
     <Property Name="ExamDuration" Type="Int32" />
     <Property Name="TStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Questions" Relationship="Self.FK__Question__Subjec__38996AB5" FromRole="TestSubject" ToRole="Question" />
-    <NavigationProperty Name="TestFiles" Relationship="Self.FK__TestFile__Subjec__2C3393D0" FromRole="TestSubject" ToRole="TestFile" />
+    <NavigationProperty Name="LevelTables" Relationship="Self.FK__LevelTabl__Subje__71D1E811" FromRole="TestSubject" ToRole="LevelTable" />
+    <NavigationProperty Name="Questions" Relationship="Self.FK__Question__Subjec__403A8C7D" FromRole="TestSubject" ToRole="Question" />
+    <NavigationProperty Name="ReportCards" Relationship="Self.FK__ReportCar__Subje__6477ECF3" FromRole="TestSubject" ToRole="ReportCard" />
   </EntityType>
-  <Association Name="FK__Question__Subjec__38996AB5">
+  <Association Name="FK__LevelTabl__Stude__72C60C4A">
+    <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+    <End Role="LevelTable" Type="Self.LevelTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="StudentId" />
+      </Principal>
+      <Dependent Role="LevelTable">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LevelTabl__Subje__71D1E811">
+    <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
+    <End Role="LevelTable" Type="Self.LevelTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestSubject">
+        <PropertyRef Name="SubjectId" />
+      </Principal>
+      <Dependent Role="LevelTable">
+        <PropertyRef Name="SubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Question__Subjec__403A8C7D">
     <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
     <End Role="Question" Type="Self.Question" Multiplicity="*" />
     <ReferentialConstraint>
@@ -79,38 +119,92 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__TestFile__Subjec__2C3393D0">
+  <Association Name="FK__ReportCar__Stude__6383C8BA">
+    <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+    <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="StudentId" />
+      </Principal>
+      <Dependent Role="ReportCard">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ReportCar__Subje__6477ECF3">
     <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
-    <End Role="TestFile" Type="Self.TestFile" Multiplicity="*" />
+    <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="TestSubject">
         <PropertyRef Name="SubjectId" />
       </Principal>
-      <Dependent Role="TestFile">
-        <PropertyRef Name="SubjectId" />
+      <Dependent Role="ReportCard">
+        <PropertyRef Name="SubjectID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="OnlineExamEntities2" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="OnlineExamEntities12" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Admins" EntityType="Self.Admin" />
+    <EntitySet Name="LevelTables" EntityType="Self.LevelTable" />
     <EntitySet Name="Questions" EntityType="Self.Question" />
+    <EntitySet Name="ReportCards" EntityType="Self.ReportCard" />
     <EntitySet Name="Students" EntityType="Self.Student" />
-    <EntitySet Name="TestFiles" EntityType="Self.TestFile" />
     <EntitySet Name="TestSubjects" EntityType="Self.TestSubject" />
-    <AssociationSet Name="FK__Question__Subjec__38996AB5" Association="Self.FK__Question__Subjec__38996AB5">
+    <AssociationSet Name="FK__LevelTabl__Stude__72C60C4A" Association="Self.FK__LevelTabl__Stude__72C60C4A">
+      <End Role="Student" EntitySet="Students" />
+      <End Role="LevelTable" EntitySet="LevelTables" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LevelTabl__Subje__71D1E811" Association="Self.FK__LevelTabl__Subje__71D1E811">
+      <End Role="TestSubject" EntitySet="TestSubjects" />
+      <End Role="LevelTable" EntitySet="LevelTables" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Question__Subjec__403A8C7D" Association="Self.FK__Question__Subjec__403A8C7D">
       <End Role="TestSubject" EntitySet="TestSubjects" />
       <End Role="Question" EntitySet="Questions" />
     </AssociationSet>
-    <AssociationSet Name="FK__TestFile__Subjec__2C3393D0" Association="Self.FK__TestFile__Subjec__2C3393D0">
-      <End Role="TestSubject" EntitySet="TestSubjects" />
-      <End Role="TestFile" EntitySet="TestFiles" />
+    <AssociationSet Name="FK__ReportCar__Stude__6383C8BA" Association="Self.FK__ReportCar__Stude__6383C8BA">
+      <End Role="Student" EntitySet="Students" />
+      <End Role="ReportCard" EntitySet="ReportCards" />
     </AssociationSet>
+    <AssociationSet Name="FK__ReportCar__Subje__6477ECF3" Association="Self.FK__ReportCar__Subje__6477ECF3">
+      <End Role="TestSubject" EntitySet="TestSubjects" />
+      <End Role="ReportCard" EntitySet="ReportCards" />
+    </AssociationSet>
+    <FunctionImport Name="fectchStudent" ReturnType="Collection(OnlineExamModel.fectchStudent_Result)" />
+    <FunctionImport Name="fetchLevel" ReturnType="Collection(OnlineExamModel.fetchLevel_Result)" />
+    <FunctionImport Name="fetchqusn" ReturnType="Collection(OnlineExamModel.fetchqusn_Result)" />
+    <FunctionImport Name="fetchSubject" ReturnType="Collection(OnlineExamModel.fetchSubject_Result)" />
+    <FunctionImport Name="sp_UpdateLevel">
+      <Parameter Name="Lid" Mode="In" Type="Int32" />
+      <Parameter Name="Level" Mode="In" Type="Int32" />
+    </FunctionImport>
     <FunctionImport Name="sp_UpdatePassword">
       <Parameter Name="otp" Mode="In" Type="String" />
       <Parameter Name="Password" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="fetchqusn" ReturnType="Collection(OnlineExamModel.fetchqusn_Result)" />
   </EntityContainer>
+  <ComplexType Name="fectchStudent_Result">
+    <Property Type="Int32" Name="StudentId" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+    <Property Type="String" Name="Mobile" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Email" Nullable="true" MaxLength="40" />
+    <Property Type="DateTime" Name="DOB" Nullable="true" />
+    <Property Type="String" Name="College" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="City" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="State" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Qualifacton" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="YearOfCompletion" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Password" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="LastLogin" Nullable="true" Precision="23" />
+    <Property Type="String" Name="OTP" Nullable="true" MaxLength="20" />
+    <Property Type="Guid" Name="ActivetionCode" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="fetchLevel_Result">
+    <Property Type="Int32" Name="Lid" Nullable="false" />
+    <Property Type="Int32" Name="SubjectId" Nullable="true" />
+    <Property Type="Int32" Name="StudentId" Nullable="true" />
+    <Property Type="Int32" Name="Level" Nullable="true" />
+  </ComplexType>
   <ComplexType Name="fetchqusn_Result">
     <Property Type="Int32" Name="QID" Nullable="false" />
     <Property Type="String" Name="Qsn" Nullable="true" MaxLength="200" />
@@ -119,8 +213,16 @@
     <Property Type="String" Name="Opt3" Nullable="true" MaxLength="200" />
     <Property Type="String" Name="Opt4" Nullable="true" MaxLength="200" />
     <Property Type="String" Name="Answer" Nullable="true" MaxLength="200" />
-    <Property Type="String" Name="Level" Nullable="true" MaxLength="5" />
+    <Property Type="Int32" Name="Level" Nullable="true" />
     <Property Type="String" Name="FileName" Nullable="true" MaxLength="30" />
     <Property Type="Int32" Name="SubjectId" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="fetchSubject_Result">
+    <Property Type="Int32" Name="SubjectId" Nullable="false" />
+    <Property Type="String" Name="Subject" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="TotalMark" Nullable="true" />
+    <Property Type="Int32" Name="PassingMark" Nullable="true" />
+    <Property Type="Int32" Name="ExamDuration" Nullable="true" />
+    <Property Type="String" Name="TStatus" Nullable="true" MaxLength="20" />
   </ComplexType>
 </Schema>

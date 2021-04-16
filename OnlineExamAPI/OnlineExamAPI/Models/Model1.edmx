@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="OnlineExamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="OnlineExamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="AdminId" />
@@ -12,6 +12,15 @@
           <Property Name="AdminId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="30" />
           <Property Name="Password" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="LevelTable">
+          <Key>
+            <PropertyRef Name="Lid" />
+          </Key>
+          <Property Name="Lid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubjectId" Type="int" />
+          <Property Name="StudentId" Type="int" />
+          <Property Name="Level" Type="int" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -24,9 +33,20 @@
           <Property Name="Opt3" Type="varchar" MaxLength="200" />
           <Property Name="Opt4" Type="varchar" MaxLength="200" />
           <Property Name="Answer" Type="varchar" MaxLength="200" />
-          <Property Name="Level" Type="varchar" MaxLength="5" />
+          <Property Name="Level" Type="int" />
           <Property Name="FileName" Type="varchar" MaxLength="30" />
           <Property Name="SubjectId" Type="int" />
+        </EntityType>
+        <EntityType Name="ReportCard">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="ReportId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudentId" Type="int" />
+          <Property Name="SubjectID" Type="int" />
+          <Property Name="Marks" Type="int" />
+          <Property Name="RStatus" Type="varchar" MaxLength="20" />
+          <Property Name="ExamDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -42,20 +62,10 @@
           <Property Name="State" Type="varchar" MaxLength="20" />
           <Property Name="Qualifacton" Type="varchar" MaxLength="20" />
           <Property Name="YearOfCompletion" Type="varchar" MaxLength="20" />
-          <Property Name="Password" Type="varchar" MaxLength="20" />
+          <Property Name="Password" Type="varchar" MaxLength="100" />
           <Property Name="LastLogin" Type="datetime" />
-          <Property Name="EmailVerification" Type="bit" />
-          <Property Name="OTP" Type="nvarchar" MaxLength="4" />
+          <Property Name="OTP" Type="nvarchar" MaxLength="20" />
           <Property Name="ActivetionCode" Type="uniqueidentifier" />
-        </EntityType>
-        <EntityType Name="TestFile">
-          <Key>
-            <PropertyRef Name="FileId" />
-          </Key>
-          <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Path" Type="varchar" MaxLength="30" />
-          <Property Name="Level" Type="int" />
-          <Property Name="SubjectId" Type="int" />
         </EntityType>
         <EntityType Name="TestSubject">
           <Key>
@@ -68,7 +78,31 @@
           <Property Name="ExamDuration" Type="int" />
           <Property Name="TStatus" Type="varchar" MaxLength="20" />
         </EntityType>
-        <Association Name="FK__Question__Subjec__38996AB5">
+        <Association Name="FK__LevelTabl__Stude__72C60C4A">
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <End Role="LevelTable" Type="Self.LevelTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="LevelTable">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__LevelTabl__Subje__71D1E811">
+          <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
+          <End Role="LevelTable" Type="Self.LevelTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestSubject">
+              <PropertyRef Name="SubjectId" />
+            </Principal>
+            <Dependent Role="LevelTable">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Question__Subjec__403A8C7D">
           <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
           <End Role="Question" Type="Self.Question" Multiplicity="*" />
           <ReferentialConstraint>
@@ -80,39 +114,72 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TestFile__Subjec__2C3393D0">
+        <Association Name="FK__ReportCar__Stude__6383C8BA">
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="ReportCard">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReportCar__Subje__6477ECF3">
           <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
-          <End Role="TestFile" Type="Self.TestFile" Multiplicity="*" />
+          <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TestSubject">
               <PropertyRef Name="SubjectId" />
             </Principal>
-            <Dependent Role="TestFile">
-              <PropertyRef Name="SubjectId" />
+            <Dependent Role="ReportCard">
+              <PropertyRef Name="SubjectID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fectchStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="fetchLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="fetchqusn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="fetchSubject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_UpdateLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Lid" Type="int" Mode="In" />
+          <Parameter Name="Level" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_UpdatePassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="otp" Type="varchar" Mode="In" />
           <Parameter Name="Password" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="OnlineExamModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LevelTable" EntityType="Self.LevelTable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReportCard" EntityType="Self.ReportCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TestFile" EntityType="Self.TestFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TestSubject" EntityType="Self.TestSubject" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Question__Subjec__38996AB5" Association="Self.FK__Question__Subjec__38996AB5">
+          <AssociationSet Name="FK__LevelTabl__Stude__72C60C4A" Association="Self.FK__LevelTabl__Stude__72C60C4A">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="LevelTable" EntitySet="LevelTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK__LevelTabl__Subje__71D1E811" Association="Self.FK__LevelTabl__Subje__71D1E811">
+            <End Role="TestSubject" EntitySet="TestSubject" />
+            <End Role="LevelTable" EntitySet="LevelTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Question__Subjec__403A8C7D" Association="Self.FK__Question__Subjec__403A8C7D">
             <End Role="TestSubject" EntitySet="TestSubject" />
             <End Role="Question" EntitySet="Question" />
           </AssociationSet>
-          <AssociationSet Name="FK__TestFile__Subjec__2C3393D0" Association="Self.FK__TestFile__Subjec__2C3393D0">
+          <AssociationSet Name="FK__ReportCar__Stude__6383C8BA" Association="Self.FK__ReportCar__Stude__6383C8BA">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="ReportCard" EntitySet="ReportCard" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReportCar__Subje__6477ECF3" Association="Self.FK__ReportCar__Subje__6477ECF3">
             <End Role="TestSubject" EntitySet="TestSubject" />
-            <End Role="TestFile" EntitySet="TestFile" />
+            <End Role="ReportCard" EntitySet="ReportCard" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OnlineExamModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -123,6 +190,17 @@
           <Property Name="AdminId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="LevelTable">
+          <Key>
+            <PropertyRef Name="Lid" />
+          </Key>
+          <Property Name="Lid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubjectId" Type="Int32" />
+          <Property Name="StudentId" Type="Int32" />
+          <Property Name="Level" Type="Int32" />
+          <NavigationProperty Name="Student" Relationship="Self.FK__LevelTabl__Stude__72C60C4A" FromRole="LevelTable" ToRole="Student" />
+          <NavigationProperty Name="TestSubject" Relationship="Self.FK__LevelTabl__Subje__71D1E811" FromRole="LevelTable" ToRole="TestSubject" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -135,10 +213,23 @@
           <Property Name="Opt3" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Opt4" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Answer" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Level" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Level" Type="Int32" />
           <Property Name="FileName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="SubjectId" Type="Int32" />
-          <NavigationProperty Name="TestSubject" Relationship="Self.FK__Question__Subjec__38996AB5" FromRole="Question" ToRole="TestSubject" />
+          <NavigationProperty Name="TestSubject" Relationship="Self.FK__Question__Subjec__403A8C7D" FromRole="Question" ToRole="TestSubject" />
+        </EntityType>
+        <EntityType Name="ReportCard">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="ReportId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudentId" Type="Int32" />
+          <Property Name="SubjectID" Type="Int32" />
+          <Property Name="Marks" Type="Int32" />
+          <Property Name="RStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ExamDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Student" Relationship="Self.FK__ReportCar__Stude__6383C8BA" FromRole="ReportCard" ToRole="Student" />
+          <NavigationProperty Name="TestSubject" Relationship="Self.FK__ReportCar__Subje__6477ECF3" FromRole="ReportCard" ToRole="TestSubject" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -154,21 +245,12 @@
           <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Qualifacton" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="YearOfCompletion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="LastLogin" Type="DateTime" Precision="3" />
-          <Property Name="EmailVerification" Type="Boolean" />
-          <Property Name="OTP" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ActivetionCode" Type="Guid" />
-        </EntityType>
-        <EntityType Name="TestFile">
-          <Key>
-            <PropertyRef Name="FileId" />
-          </Key>
-          <Property Name="FileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Path" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Level" Type="Int32" />
-          <Property Name="SubjectId" Type="Int32" />
-          <NavigationProperty Name="TestSubject" Relationship="Self.FK__TestFile__Subjec__2C3393D0" FromRole="TestFile" ToRole="TestSubject" />
+          <NavigationProperty Name="LevelTables" Relationship="Self.FK__LevelTabl__Stude__72C60C4A" FromRole="Student" ToRole="LevelTable" />
+          <NavigationProperty Name="ReportCards" Relationship="Self.FK__ReportCar__Stude__6383C8BA" FromRole="Student" ToRole="ReportCard" />
         </EntityType>
         <EntityType Name="TestSubject">
           <Key>
@@ -180,10 +262,35 @@
           <Property Name="PassingMark" Type="Int32" />
           <Property Name="ExamDuration" Type="Int32" />
           <Property Name="TStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Questions" Relationship="Self.FK__Question__Subjec__38996AB5" FromRole="TestSubject" ToRole="Question" />
-          <NavigationProperty Name="TestFiles" Relationship="Self.FK__TestFile__Subjec__2C3393D0" FromRole="TestSubject" ToRole="TestFile" />
+          <NavigationProperty Name="LevelTables" Relationship="Self.FK__LevelTabl__Subje__71D1E811" FromRole="TestSubject" ToRole="LevelTable" />
+          <NavigationProperty Name="Questions" Relationship="Self.FK__Question__Subjec__403A8C7D" FromRole="TestSubject" ToRole="Question" />
+          <NavigationProperty Name="ReportCards" Relationship="Self.FK__ReportCar__Subje__6477ECF3" FromRole="TestSubject" ToRole="ReportCard" />
         </EntityType>
-        <Association Name="FK__Question__Subjec__38996AB5">
+        <Association Name="FK__LevelTabl__Stude__72C60C4A">
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <End Role="LevelTable" Type="Self.LevelTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="LevelTable">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__LevelTabl__Subje__71D1E811">
+          <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
+          <End Role="LevelTable" Type="Self.LevelTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestSubject">
+              <PropertyRef Name="SubjectId" />
+            </Principal>
+            <Dependent Role="LevelTable">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Question__Subjec__403A8C7D">
           <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
           <End Role="Question" Type="Self.Question" Multiplicity="*" />
           <ReferentialConstraint>
@@ -195,38 +302,92 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TestFile__Subjec__2C3393D0">
+        <Association Name="FK__ReportCar__Stude__6383C8BA">
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="ReportCard">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReportCar__Subje__6477ECF3">
           <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
-          <End Role="TestFile" Type="Self.TestFile" Multiplicity="*" />
+          <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TestSubject">
               <PropertyRef Name="SubjectId" />
             </Principal>
-            <Dependent Role="TestFile">
-              <PropertyRef Name="SubjectId" />
+            <Dependent Role="ReportCard">
+              <PropertyRef Name="SubjectID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="OnlineExamEntities2" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="OnlineExamEntities12" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admins" EntityType="Self.Admin" />
+          <EntitySet Name="LevelTables" EntityType="Self.LevelTable" />
           <EntitySet Name="Questions" EntityType="Self.Question" />
+          <EntitySet Name="ReportCards" EntityType="Self.ReportCard" />
           <EntitySet Name="Students" EntityType="Self.Student" />
-          <EntitySet Name="TestFiles" EntityType="Self.TestFile" />
           <EntitySet Name="TestSubjects" EntityType="Self.TestSubject" />
-          <AssociationSet Name="FK__Question__Subjec__38996AB5" Association="Self.FK__Question__Subjec__38996AB5">
+          <AssociationSet Name="FK__LevelTabl__Stude__72C60C4A" Association="Self.FK__LevelTabl__Stude__72C60C4A">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="LevelTable" EntitySet="LevelTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK__LevelTabl__Subje__71D1E811" Association="Self.FK__LevelTabl__Subje__71D1E811">
+            <End Role="TestSubject" EntitySet="TestSubjects" />
+            <End Role="LevelTable" EntitySet="LevelTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Question__Subjec__403A8C7D" Association="Self.FK__Question__Subjec__403A8C7D">
             <End Role="TestSubject" EntitySet="TestSubjects" />
             <End Role="Question" EntitySet="Questions" />
           </AssociationSet>
-          <AssociationSet Name="FK__TestFile__Subjec__2C3393D0" Association="Self.FK__TestFile__Subjec__2C3393D0">
-            <End Role="TestSubject" EntitySet="TestSubjects" />
-            <End Role="TestFile" EntitySet="TestFiles" />
+          <AssociationSet Name="FK__ReportCar__Stude__6383C8BA" Association="Self.FK__ReportCar__Stude__6383C8BA">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="ReportCard" EntitySet="ReportCards" />
           </AssociationSet>
+          <AssociationSet Name="FK__ReportCar__Subje__6477ECF3" Association="Self.FK__ReportCar__Subje__6477ECF3">
+            <End Role="TestSubject" EntitySet="TestSubjects" />
+            <End Role="ReportCard" EntitySet="ReportCards" />
+          </AssociationSet>
+          <FunctionImport Name="fectchStudent" ReturnType="Collection(OnlineExamModel.fectchStudent_Result)" />
+          <FunctionImport Name="fetchLevel" ReturnType="Collection(OnlineExamModel.fetchLevel_Result)" />
+          <FunctionImport Name="fetchqusn" ReturnType="Collection(OnlineExamModel.fetchqusn_Result)" />
+          <FunctionImport Name="fetchSubject" ReturnType="Collection(OnlineExamModel.fetchSubject_Result)" />
+          <FunctionImport Name="sp_UpdateLevel">
+            <Parameter Name="Lid" Mode="In" Type="Int32" />
+            <Parameter Name="Level" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="sp_UpdatePassword">
             <Parameter Name="otp" Mode="In" Type="String" />
             <Parameter Name="Password" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="fetchqusn" ReturnType="Collection(OnlineExamModel.fetchqusn_Result)" />
         </EntityContainer>
+        <ComplexType Name="fectchStudent_Result">
+          <Property Type="Int32" Name="StudentId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="DOB" Nullable="true" />
+          <Property Type="String" Name="College" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Qualifacton" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="YearOfCompletion" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="LastLogin" Nullable="true" Precision="23" />
+          <Property Type="String" Name="OTP" Nullable="true" MaxLength="20" />
+          <Property Type="Guid" Name="ActivetionCode" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="fetchLevel_Result">
+          <Property Type="Int32" Name="Lid" Nullable="false" />
+          <Property Type="Int32" Name="SubjectId" Nullable="true" />
+          <Property Type="Int32" Name="StudentId" Nullable="true" />
+          <Property Type="Int32" Name="Level" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="fetchqusn_Result">
           <Property Type="Int32" Name="QID" Nullable="false" />
           <Property Type="String" Name="Qsn" Nullable="true" MaxLength="200" />
@@ -235,22 +396,40 @@
           <Property Type="String" Name="Opt3" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Opt4" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Answer" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="Level" Nullable="true" MaxLength="5" />
+          <Property Type="Int32" Name="Level" Nullable="true" />
           <Property Type="String" Name="FileName" Nullable="true" MaxLength="30" />
           <Property Type="Int32" Name="SubjectId" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="fetchSubject_Result">
+          <Property Type="Int32" Name="SubjectId" Nullable="false" />
+          <Property Type="String" Name="Subject" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="TotalMark" Nullable="true" />
+          <Property Type="Int32" Name="PassingMark" Nullable="true" />
+          <Property Type="Int32" Name="ExamDuration" Nullable="true" />
+          <Property Type="String" Name="TStatus" Nullable="true" MaxLength="20" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities2">
+        <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities12">
           <EntitySetMapping Name="Admins">
             <EntityTypeMapping TypeName="OnlineExamModel.Admin">
               <MappingFragment StoreEntitySet="Admin">
                 <ScalarProperty Name="AdminId" ColumnName="AdminId" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LevelTables">
+            <EntityTypeMapping TypeName="OnlineExamModel.LevelTable">
+              <MappingFragment StoreEntitySet="LevelTable">
+                <ScalarProperty Name="Lid" ColumnName="Lid" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -270,6 +449,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ReportCards">
+            <EntityTypeMapping TypeName="OnlineExamModel.ReportCard">
+              <MappingFragment StoreEntitySet="ReportCard">
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+                <ScalarProperty Name="Marks" ColumnName="Marks" />
+                <ScalarProperty Name="RStatus" ColumnName="RStatus" />
+                <ScalarProperty Name="ExamDate" ColumnName="ExamDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Students">
             <EntityTypeMapping TypeName="OnlineExamModel.Student">
               <MappingFragment StoreEntitySet="Student">
@@ -285,19 +476,8 @@
                 <ScalarProperty Name="YearOfCompletion" ColumnName="YearOfCompletion" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
-                <ScalarProperty Name="EmailVerification" ColumnName="EmailVerification" />
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
                 <ScalarProperty Name="ActivetionCode" ColumnName="ActivetionCode" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TestFiles">
-            <EntityTypeMapping TypeName="OnlineExamModel.TestFile">
-              <MappingFragment StoreEntitySet="TestFile">
-                <ScalarProperty Name="FileId" ColumnName="FileId" />
-                <ScalarProperty Name="Path" ColumnName="Path" />
-                <ScalarProperty Name="Level" ColumnName="Level" />
-                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -313,7 +493,36 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_UpdatePassword" FunctionName="OnlineExamModel.Store.sp_UpdatePassword" />
+          <FunctionImportMapping FunctionImportName="fectchStudent" FunctionName="OnlineExamModel.Store.fectchStudent">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineExamModel.fectchStudent_Result">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="College" ColumnName="College" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Qualifacton" ColumnName="Qualifacton" />
+                <ScalarProperty Name="YearOfCompletion" ColumnName="YearOfCompletion" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="ActivetionCode" ColumnName="ActivetionCode" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="fetchLevel" FunctionName="OnlineExamModel.Store.fetchLevel">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineExamModel.fetchLevel_Result">
+                <ScalarProperty Name="Lid" ColumnName="Lid" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="fetchqusn" FunctionName="OnlineExamModel.Store.fetchqusn">
             <ResultMapping>
               <ComplexTypeMapping TypeName="OnlineExamModel.fetchqusn_Result">
@@ -330,6 +539,20 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="fetchSubject" FunctionName="OnlineExamModel.Store.fetchSubject">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineExamModel.fetchSubject_Result">
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+                <ScalarProperty Name="PassingMark" ColumnName="PassingMark" />
+                <ScalarProperty Name="ExamDuration" ColumnName="ExamDuration" />
+                <ScalarProperty Name="TStatus" ColumnName="TStatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_UpdateLevel" FunctionName="OnlineExamModel.Store.sp_UpdateLevel" />
+          <FunctionImportMapping FunctionImportName="sp_UpdatePassword" FunctionName="OnlineExamModel.Store.sp_UpdatePassword" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

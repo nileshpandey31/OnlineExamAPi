@@ -16,10 +16,10 @@ namespace OnlineExamAPI.Models
     using System.Data.Objects.DataClasses;
     using System.Linq;
     
-    public partial class OnlineExamEntities2 : DbContext
+    public partial class OnlineExamEntities12 : DbContext
     {
-        public OnlineExamEntities2()
-            : base("name=OnlineExamEntities2")
+        public OnlineExamEntities12()
+            : base("name=OnlineExamEntities12")
         {
         }
     
@@ -29,10 +29,44 @@ namespace OnlineExamAPI.Models
         }
     
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<LevelTable> LevelTables { get; set; }
         public DbSet<Question> Questions { get; set; }
+        public DbSet<ReportCard> ReportCards { get; set; }
         public DbSet<Student> Students { get; set; }
-        public DbSet<TestFile> TestFiles { get; set; }
         public DbSet<TestSubject> TestSubjects { get; set; }
+    
+        public virtual ObjectResult<fectchStudent_Result> fectchStudent()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<fectchStudent_Result>("fectchStudent");
+        }
+    
+        public virtual ObjectResult<fetchLevel_Result> fetchLevel()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<fetchLevel_Result>("fetchLevel");
+        }
+    
+        public virtual ObjectResult<fetchqusn_Result> fetchqusn()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<fetchqusn_Result>("fetchqusn");
+        }
+    
+        public virtual ObjectResult<fetchSubject_Result> fetchSubject()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<fetchSubject_Result>("fetchSubject");
+        }
+    
+        public virtual int sp_UpdateLevel(Nullable<int> lid, Nullable<int> level)
+        {
+            var lidParameter = lid.HasValue ?
+                new ObjectParameter("Lid", lid) :
+                new ObjectParameter("Lid", typeof(int));
+    
+            var levelParameter = level.HasValue ?
+                new ObjectParameter("Level", level) :
+                new ObjectParameter("Level", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_UpdateLevel", lidParameter, levelParameter);
+        }
     
         public virtual int sp_UpdatePassword(string otp, string password)
         {
@@ -45,11 +79,6 @@ namespace OnlineExamAPI.Models
                 new ObjectParameter("Password", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_UpdatePassword", otpParameter, passwordParameter);
-        }
-    
-        public virtual ObjectResult<fetchqusn_Result> fetchqusn()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<fetchqusn_Result>("fetchqusn");
         }
     }
 }

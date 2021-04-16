@@ -24,10 +24,10 @@ namespace OnlineExamAPI.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")] // all permision given
 
     [Route("api/StudentAPI")]   // parent route
-    
+
     public class StudentAPIController : ApiController
     {
-        OnlineExamEntities2 db = new OnlineExamEntities2();   //db instance
+        OnlineExamEntities12 db = new OnlineExamEntities12();   //db instance
 
         //method to insert student into student table with passwrd encryption
 
@@ -82,11 +82,11 @@ namespace OnlineExamAPI.Controllers
 
         [Route("api/StudentAPI/ShowAllStudents")]
         [HttpGet]                                                             // get method for displaying
-        public IEnumerable<Student> Get()
+        public IEnumerable<fectchStudent_Result> Get()
         {
             try
             {
-                var data = db.Students.ToList();
+                var data = db.fectchStudent();
                 return data;
             }
             catch (Exception ex)
@@ -104,46 +104,46 @@ namespace OnlineExamAPI.Controllers
             string message = "";
             HttpResponseMessage result = null;
             var httpRequest = HttpContext.Current.Request;
-           
 
-                if (httpRequest.Files.Count > 0)
+
+            if (httpRequest.Files.Count > 0)
+            {
+                HttpPostedFile file = httpRequest.Files[0];
+                Stream stream = file.InputStream;
+
+                IExcelDataReader reader = null;
+
+                if (file.FileName.EndsWith(".xls"))
                 {
-                    HttpPostedFile file = httpRequest.Files[0];
-                    Stream stream = file.InputStream;
+                    reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                }
+                else if (file.FileName.EndsWith(".xlsx"))
+                {
+                    reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                }
+                else
+                {
+                    message = "This file format is not supported";
+                }
 
-                    IExcelDataReader reader = null;
+                DataSet excelRecords = reader.AsDataSet();
+                reader.Close();
 
-                    if (file.FileName.EndsWith(".xls"))
-                    {
-                        reader = ExcelReaderFactory.CreateBinaryReader(stream);
-                    }
-                    else if (file.FileName.EndsWith(".xlsx"))
-                    {
-                        reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                    }
-                    else
-                    {
-                        message = "This file format is not supported";
-                    }
+                var finalRecords = excelRecords.Tables[0];
 
-                    DataSet excelRecords = reader.AsDataSet();
-                    reader.Close();
-
-                    var finalRecords = excelRecords.Tables[0];
-                   
-                    for (int i = 1; i < finalRecords.Rows.Count; i++)
-                    {
-                        Question objUser = new Question();
-                        objUser.Qsn = finalRecords.Rows[i][0].ToString();
-                        objUser.Opt1 = finalRecords.Rows[i][1].ToString();
-                        objUser.Opt2 = finalRecords.Rows[i][2].ToString();
-                        objUser.Opt3 = finalRecords.Rows[i][3].ToString();
-                        objUser.Opt4 = finalRecords.Rows[i][4].ToString();
-                        objUser.Answer = finalRecords.Rows[i][5].ToString();
-                        objUser.Level= finalRecords.Rows[i][6].ToString();
+                for (int i = 1; i < finalRecords.Rows.Count; i++)
+                {
+                    Question objUser = new Question();
+                    objUser.Qsn = finalRecords.Rows[i][0].ToString();
+                    objUser.Opt1 = finalRecords.Rows[i][1].ToString();
+                    objUser.Opt2 = finalRecords.Rows[i][2].ToString();
+                    objUser.Opt3 = finalRecords.Rows[i][3].ToString();
+                    objUser.Opt4 = finalRecords.Rows[i][4].ToString();
+                    objUser.Answer = finalRecords.Rows[i][5].ToString();
+                    objUser.Level = Convert.ToInt32(finalRecords.Rows[i][6]);
                     objUser.FileName = file.FileName;           // fetch the name of file uploaded with extenson
-                        objUser.SubjectId =GlobalText.sid;
-                    
+                    objUser.SubjectId = GlobalText.sid;
+
 
 
                     db.Questions.Add(objUser);
@@ -152,23 +152,23 @@ namespace OnlineExamAPI.Controllers
 
 
                 int output = db.SaveChanges();
-                    if (output > 0)
-                    {
-                        message = file.FileName + " Excel file has been successfully uploaded";
-                      
-                    }
-                    else
-                    {
-                        message = "Excel file uploaded has fiald";
-                    }
+                if (output > 0)
+                {
+                    message = file.FileName + " Excel file has been successfully uploaded";
 
                 }
-
                 else
                 {
-                    result = Request.CreateResponse(HttpStatusCode.BadRequest);
+                    message = "Excel file uploaded has fiald";
                 }
-           
+
+            }
+
+            else
+            {
+                result = Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+
             return message;
         }
 
@@ -176,7 +176,7 @@ namespace OnlineExamAPI.Controllers
 
         [Route("api/StudentAPI/TestSubject")]
         [HttpPost]
-        public bool Post([FromBody] TestSubject ts)       
+        public bool Post([FromBody] TestSubject ts)
         {
             try
             {
@@ -196,21 +196,21 @@ namespace OnlineExamAPI.Controllers
 
         [Route("api/StudentAPI/AddSubId")]
         [HttpPost]
-        public bool AddSubID([FromBody]  int Sid )
+        public bool AddSubID([FromBody] int Sid)
         {
 
             try
             {
                 GlobalText.sid = Sid;
-               
+
                 return true;
-               
+
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            
+
 
         }
 
@@ -219,12 +219,12 @@ namespace OnlineExamAPI.Controllers
         [Route("api/StudentAPI/ShowSubject")]
         [HttpGet]
 
-        public IEnumerable<TestSubject> Subject()      // will return list of subject object
+        public IEnumerable<fetchSubject_Result> Subject()      // will return list of subject object
         {
             try
             {
-                var data = db.TestSubjects.ToList();
-                return data;
+
+                return db.fetchSubject();
             }
             catch (Exception ex)
             {
@@ -361,7 +361,7 @@ namespace OnlineExamAPI.Controllers
             try
             {
                 string otp = stud.OTP; ;
-                string NewPass = stud.Password;
+                string NewPass = Convert.ToBase64String(System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(stud.Password)));
 
                 var res = db.sp_UpdatePassword(otp, NewPass);
                 if (res > 0)
@@ -377,6 +377,117 @@ namespace OnlineExamAPI.Controllers
             return result;
         }
 
+        //method to insert reports
+
+        [Route("api/StudentAPI/InsertReport")]
+        [HttpPost]
+        public bool InsertReport([FromBody] ReportCard rc)
+        {
+            try
+            {
+                db.ReportCards.Add(rc);
+                var res = db.SaveChanges();
+                if (res > 0)
+                    return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return false;
+        }
+
+        //method to insert Levels
+
+        [Route("api/StudentAPI/InsertLevel")]
+        [HttpPost]
+        public bool InsertLevel([FromBody] LevelTable l)
+        {
+            try
+            {
+                db.LevelTables.Add(l);
+                var res = db.SaveChanges();
+                if (res > 0)
+                    return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return false;
+        }
+
+        //method to update level
+
+
+        [Route("api/StudentAPI/UpdateLevel/{l}")]
+        [HttpPost]
+        public bool Put(int l,[FromBody] int lid)
+        {
+           
+            try
+            {
+
+                var res = db.sp_UpdateLevel(lid, l);
+                if (res > 0)
+                {
+
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return false;
+        }
+
+        //method to fetch level
+        [Route("api/StudentAPI/ShowLevel")]
+        [HttpGet]
+
+        public IEnumerable<fetchLevel_Result> ShowLevel()      // will return list of Level object
+        {
+            try
+            {
+                var Level = db.fetchLevel();
+                return Level;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        //fetch present student level
+
+        [Route("api/StudentAPI/PresentLevel/{sid}/{subid}")]
+        [HttpGet]
+        public  int PresentLevel(int sid, int subid)
+        {
+            
+            try
+            {
+
+                var data = db.LevelTables.Where(x => x.StudentId == sid && x.SubjectId == subid);
+
+                if (data.Count() != 0)
+                {
+                    var plevelobj = db.LevelTables.Where(x => x.StudentId == sid && x.SubjectId == subid).SingleOrDefault();
+                    return Convert.ToInt32(plevelobj.Level);
+                }
+                
+               
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return 0;     
+        }
 
     }
+    
 }
