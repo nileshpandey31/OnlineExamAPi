@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="OnlineExamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="OnlineExamModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="AdminId" />
@@ -45,6 +45,7 @@
           <Property Name="StudentId" Type="int" />
           <Property Name="SubjectID" Type="int" />
           <Property Name="Marks" Type="int" />
+          <Property Name="SLevel" Type="int" />
           <Property Name="RStatus" Type="varchar" MaxLength="20" />
           <Property Name="ExamDate" Type="datetime" />
         </EntityType>
@@ -114,7 +115,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ReportCar__Stude__6383C8BA">
+        <Association Name="FK__ReportCar__Stude__778AC167">
           <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
           <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
           <ReferentialConstraint>
@@ -126,7 +127,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ReportCar__Subje__6477ECF3">
+        <Association Name="FK__ReportCar__Subje__787EE5A0">
           <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
           <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
           <ReferentialConstraint>
@@ -138,10 +139,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="allevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="allreport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="fectchStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="fetchLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="fetchqusn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="fetchSubject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="MyLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="myReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sid" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_UpdateLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Lid" Type="int" Mode="In" />
           <Parameter Name="Level" Type="int" Mode="In" />
@@ -150,6 +159,15 @@
           <Parameter Name="otp" Type="varchar" Mode="In" />
           <Parameter Name="Password" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="sp_UpdateSubject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SubjectId" Type="int" Mode="In" />
+          <Parameter Name="Subject" Type="varchar" Mode="In" />
+          <Parameter Name="TotalMark" Type="int" Mode="In" />
+          <Parameter Name="PassingMark" Type="int" Mode="In" />
+          <Parameter Name="ExamDuration" Type="int" Mode="In" />
+          <Parameter Name="TStatus" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="unique_file_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="OnlineExamModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LevelTable" EntityType="Self.LevelTable" Schema="dbo" store:Type="Tables" />
@@ -169,17 +187,16 @@
             <End Role="TestSubject" EntitySet="TestSubject" />
             <End Role="Question" EntitySet="Question" />
           </AssociationSet>
-          <AssociationSet Name="FK__ReportCar__Stude__6383C8BA" Association="Self.FK__ReportCar__Stude__6383C8BA">
+          <AssociationSet Name="FK__ReportCar__Stude__778AC167" Association="Self.FK__ReportCar__Stude__778AC167">
             <End Role="Student" EntitySet="Student" />
             <End Role="ReportCard" EntitySet="ReportCard" />
           </AssociationSet>
-          <AssociationSet Name="FK__ReportCar__Subje__6477ECF3" Association="Self.FK__ReportCar__Subje__6477ECF3">
+          <AssociationSet Name="FK__ReportCar__Subje__787EE5A0" Association="Self.FK__ReportCar__Subje__787EE5A0">
             <End Role="TestSubject" EntitySet="TestSubject" />
             <End Role="ReportCard" EntitySet="ReportCard" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OnlineExamModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -226,10 +243,11 @@
           <Property Name="StudentId" Type="Int32" />
           <Property Name="SubjectID" Type="Int32" />
           <Property Name="Marks" Type="Int32" />
+          <Property Name="SLevel" Type="Int32" />
           <Property Name="RStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="ExamDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Student" Relationship="Self.FK__ReportCar__Stude__6383C8BA" FromRole="ReportCard" ToRole="Student" />
-          <NavigationProperty Name="TestSubject" Relationship="Self.FK__ReportCar__Subje__6477ECF3" FromRole="ReportCard" ToRole="TestSubject" />
+          <NavigationProperty Name="Student" Relationship="Self.FK__ReportCar__Stude__778AC167" FromRole="ReportCard" ToRole="Student" />
+          <NavigationProperty Name="TestSubject" Relationship="Self.FK__ReportCar__Subje__787EE5A0" FromRole="ReportCard" ToRole="TestSubject" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -250,7 +268,7 @@
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ActivetionCode" Type="Guid" />
           <NavigationProperty Name="LevelTables" Relationship="Self.FK__LevelTabl__Stude__72C60C4A" FromRole="Student" ToRole="LevelTable" />
-          <NavigationProperty Name="ReportCards" Relationship="Self.FK__ReportCar__Stude__6383C8BA" FromRole="Student" ToRole="ReportCard" />
+          <NavigationProperty Name="ReportCards" Relationship="Self.FK__ReportCar__Stude__778AC167" FromRole="Student" ToRole="ReportCard" />
         </EntityType>
         <EntityType Name="TestSubject">
           <Key>
@@ -264,7 +282,7 @@
           <Property Name="TStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="LevelTables" Relationship="Self.FK__LevelTabl__Subje__71D1E811" FromRole="TestSubject" ToRole="LevelTable" />
           <NavigationProperty Name="Questions" Relationship="Self.FK__Question__Subjec__403A8C7D" FromRole="TestSubject" ToRole="Question" />
-          <NavigationProperty Name="ReportCards" Relationship="Self.FK__ReportCar__Subje__6477ECF3" FromRole="TestSubject" ToRole="ReportCard" />
+          <NavigationProperty Name="ReportCards" Relationship="Self.FK__ReportCar__Subje__787EE5A0" FromRole="TestSubject" ToRole="ReportCard" />
         </EntityType>
         <Association Name="FK__LevelTabl__Stude__72C60C4A">
           <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
@@ -302,7 +320,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ReportCar__Stude__6383C8BA">
+        <Association Name="FK__ReportCar__Stude__778AC167">
           <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
           <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
           <ReferentialConstraint>
@@ -314,7 +332,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ReportCar__Subje__6477ECF3">
+        <Association Name="FK__ReportCar__Subje__787EE5A0">
           <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
           <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
           <ReferentialConstraint>
@@ -326,7 +344,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="OnlineExamEntities12" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="OnlineExamEntities13" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admins" EntityType="Self.Admin" />
           <EntitySet Name="LevelTables" EntityType="Self.LevelTable" />
           <EntitySet Name="Questions" EntityType="Self.Question" />
@@ -345,11 +363,11 @@
             <End Role="TestSubject" EntitySet="TestSubjects" />
             <End Role="Question" EntitySet="Questions" />
           </AssociationSet>
-          <AssociationSet Name="FK__ReportCar__Stude__6383C8BA" Association="Self.FK__ReportCar__Stude__6383C8BA">
+          <AssociationSet Name="FK__ReportCar__Stude__778AC167" Association="Self.FK__ReportCar__Stude__778AC167">
             <End Role="Student" EntitySet="Students" />
             <End Role="ReportCard" EntitySet="ReportCards" />
           </AssociationSet>
-          <AssociationSet Name="FK__ReportCar__Subje__6477ECF3" Association="Self.FK__ReportCar__Subje__6477ECF3">
+          <AssociationSet Name="FK__ReportCar__Subje__787EE5A0" Association="Self.FK__ReportCar__Subje__787EE5A0">
             <End Role="TestSubject" EntitySet="TestSubjects" />
             <End Role="ReportCard" EntitySet="ReportCards" />
           </AssociationSet>
@@ -357,6 +375,9 @@
           <FunctionImport Name="fetchLevel" ReturnType="Collection(OnlineExamModel.fetchLevel_Result)" />
           <FunctionImport Name="fetchqusn" ReturnType="Collection(OnlineExamModel.fetchqusn_Result)" />
           <FunctionImport Name="fetchSubject" ReturnType="Collection(OnlineExamModel.fetchSubject_Result)" />
+          <FunctionImport Name="myReport" ReturnType="Collection(OnlineExamModel.myReport_Result)">
+          <Parameter Name="sid" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="sp_UpdateLevel">
             <Parameter Name="Lid" Mode="In" Type="Int32" />
             <Parameter Name="Level" Mode="In" Type="Int32" />
@@ -364,6 +385,20 @@
           <FunctionImport Name="sp_UpdatePassword">
             <Parameter Name="otp" Mode="In" Type="String" />
             <Parameter Name="Password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MyLevel" ReturnType="Collection(OnlineExamModel.MyLevel_Result)">
+          <Parameter Name="sid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="allevel" ReturnType="Collection(OnlineExamModel.allevel_Result)" />
+          <FunctionImport Name="allreport" ReturnType="Collection(OnlineExamModel.allreport_Result)" />
+          <FunctionImport Name="unique_file_sp" ReturnType="Collection(OnlineExamModel.unique_file_sp_Result)" />
+          <FunctionImport Name="sp_UpdateSubject">
+            <Parameter Name="SubjectId" Mode="In" Type="Int32" />
+            <Parameter Name="Subject" Mode="In" Type="String" />
+            <Parameter Name="TotalMark" Mode="In" Type="Int32" />
+            <Parameter Name="PassingMark" Mode="In" Type="Int32" />
+            <Parameter Name="ExamDuration" Mode="In" Type="Int32" />
+            <Parameter Name="TStatus" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="fectchStudent_Result">
@@ -408,12 +443,38 @@
           <Property Type="Int32" Name="ExamDuration" Nullable="true" />
           <Property Type="String" Name="TStatus" Nullable="true" MaxLength="20" />
         </ComplexType>
+        <ComplexType Name="myReport_Result">
+          <Property Type="String" Name="Subject" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="SLevel" Nullable="true" />
+          <Property Type="Int32" Name="Marks" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="MyLevel_Result">
+          <Property Type="String" Name="Subject" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="Level" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="allevel_Result">
+          <Property Type="Int32" Name="studentid" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="subject" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="level" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="allreport_Result">
+          <Property Type="Int32" Name="studentid" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="subject" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="slevel" Nullable="true" />
+          <Property Type="Int32" Name="marks" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="unique_file_sp_Result">
+          <Property Type="String" Name="FileName" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="SubjectId" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities12">
+        <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities13">
           <EntitySetMapping Name="Admins">
             <EntityTypeMapping TypeName="OnlineExamModel.Admin">
               <MappingFragment StoreEntitySet="Admin">
@@ -456,6 +517,7 @@
                 <ScalarProperty Name="StudentId" ColumnName="StudentId" />
                 <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
                 <ScalarProperty Name="Marks" ColumnName="Marks" />
+                <ScalarProperty Name="SLevel" ColumnName="SLevel" />
                 <ScalarProperty Name="RStatus" ColumnName="RStatus" />
                 <ScalarProperty Name="ExamDate" ColumnName="ExamDate" />
               </MappingFragment>
@@ -551,8 +613,55 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="myReport" FunctionName="OnlineExamModel.Store.myReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineExamModel.myReport_Result">
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="SLevel" ColumnName="SLevel" />
+                <ScalarProperty Name="Marks" ColumnName="Marks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_UpdateLevel" FunctionName="OnlineExamModel.Store.sp_UpdateLevel" />
           <FunctionImportMapping FunctionImportName="sp_UpdatePassword" FunctionName="OnlineExamModel.Store.sp_UpdatePassword" />
+          <FunctionImportMapping FunctionImportName="MyLevel" FunctionName="OnlineExamModel.Store.MyLevel">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineExamModel.MyLevel_Result">
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="allevel" FunctionName="OnlineExamModel.Store.allevel">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineExamModel.allevel_Result">
+                <ScalarProperty Name="studentid" ColumnName="studentid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="subject" ColumnName="subject" />
+                <ScalarProperty Name="level" ColumnName="level" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="allreport" FunctionName="OnlineExamModel.Store.allreport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineExamModel.allreport_Result">
+                <ScalarProperty Name="studentid" ColumnName="studentid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="subject" ColumnName="subject" />
+                <ScalarProperty Name="slevel" ColumnName="slevel" />
+                <ScalarProperty Name="marks" ColumnName="marks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="unique_file_sp" FunctionName="OnlineExamModel.Store.unique_file_sp">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OnlineExamModel.unique_file_sp_Result">
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_UpdateSubject" FunctionName="OnlineExamModel.Store.sp_UpdateSubject" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

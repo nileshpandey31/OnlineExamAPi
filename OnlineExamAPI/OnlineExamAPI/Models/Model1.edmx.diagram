@@ -4,18 +4,18 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="3fe975ea484d46c9a99ab34576e955db" Name="Diagram1">
-        <EntityTypeShape EntityType="OnlineExamModel.Admin" Width="1.5" PointX="2.75" PointY="2.625" IsExpanded="true" />
+      <Diagram DiagramId="04e881df715f485dbac52121c64d1e27" Name="Diagram1">
+        <EntityTypeShape EntityType="OnlineExamModel.Admin" Width="1.5" PointX="2.75" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="OnlineExamModel.LevelTable" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="OnlineExamModel.Question" Width="1.5" PointX="3" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineExamModel.ReportCard" Width="1.5" PointX="6" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineExamModel.ReportCard" Width="1.5" PointX="6" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="OnlineExamModel.Student" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="OnlineExamModel.TestSubject" Width="1.5" PointX="0.75" PointY="6.375" IsExpanded="true" />
         <AssociationConnector Association="OnlineExamModel.FK__LevelTabl__Stude__72C60C4A" ManuallyRouted="false" />
         <AssociationConnector Association="OnlineExamModel.FK__LevelTabl__Subje__71D1E811" ManuallyRouted="false" />
         <AssociationConnector Association="OnlineExamModel.FK__Question__Subjec__403A8C7D" ManuallyRouted="false" />
-        <AssociationConnector Association="OnlineExamModel.FK__ReportCar__Stude__6383C8BA" ManuallyRouted="false" />
-        <AssociationConnector Association="OnlineExamModel.FK__ReportCar__Subje__6477ECF3" ManuallyRouted="false" />
+        <AssociationConnector Association="OnlineExamModel.FK__ReportCar__Stude__778AC167" ManuallyRouted="false" />
+        <AssociationConnector Association="OnlineExamModel.FK__ReportCar__Subje__787EE5A0" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

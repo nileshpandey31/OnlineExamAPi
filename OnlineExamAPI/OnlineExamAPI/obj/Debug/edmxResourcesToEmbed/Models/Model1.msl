@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities12">
+  <EntityContainerMapping StorageEntityContainer="OnlineExamModelStoreContainer" CdmEntityContainer="OnlineExamEntities13">
     <EntitySetMapping Name="Admins">
       <EntityTypeMapping TypeName="OnlineExamModel.Admin">
         <MappingFragment StoreEntitySet="Admin">
@@ -43,6 +43,7 @@
           <ScalarProperty Name="StudentId" ColumnName="StudentId" />
           <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
           <ScalarProperty Name="Marks" ColumnName="Marks" />
+          <ScalarProperty Name="SLevel" ColumnName="SLevel" />
           <ScalarProperty Name="RStatus" ColumnName="RStatus" />
           <ScalarProperty Name="ExamDate" ColumnName="ExamDate" />
         </MappingFragment>
@@ -138,7 +139,54 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="myReport" FunctionName="OnlineExamModel.Store.myReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OnlineExamModel.myReport_Result">
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="SLevel" ColumnName="SLevel" />
+          <ScalarProperty Name="Marks" ColumnName="Marks" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_UpdateLevel" FunctionName="OnlineExamModel.Store.sp_UpdateLevel" />
     <FunctionImportMapping FunctionImportName="sp_UpdatePassword" FunctionName="OnlineExamModel.Store.sp_UpdatePassword" />
+    <FunctionImportMapping FunctionImportName="MyLevel" FunctionName="OnlineExamModel.Store.MyLevel">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OnlineExamModel.MyLevel_Result">
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="allevel" FunctionName="OnlineExamModel.Store.allevel">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OnlineExamModel.allevel_Result">
+          <ScalarProperty Name="studentid" ColumnName="studentid" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="subject" ColumnName="subject" />
+          <ScalarProperty Name="level" ColumnName="level" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="allreport" FunctionName="OnlineExamModel.Store.allreport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OnlineExamModel.allreport_Result">
+          <ScalarProperty Name="studentid" ColumnName="studentid" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="subject" ColumnName="subject" />
+          <ScalarProperty Name="slevel" ColumnName="slevel" />
+          <ScalarProperty Name="marks" ColumnName="marks" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="unique_file_sp" FunctionName="OnlineExamModel.Store.unique_file_sp">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OnlineExamModel.unique_file_sp_Result">
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_UpdateSubject" FunctionName="OnlineExamModel.Store.sp_UpdateSubject" />
   </EntityContainerMapping>
 </Mapping>

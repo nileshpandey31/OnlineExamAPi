@@ -40,6 +40,7 @@
     <Property Name="StudentId" Type="int" />
     <Property Name="SubjectID" Type="int" />
     <Property Name="Marks" Type="int" />
+    <Property Name="SLevel" Type="int" />
     <Property Name="RStatus" Type="varchar" MaxLength="20" />
     <Property Name="ExamDate" Type="datetime" />
   </EntityType>
@@ -109,7 +110,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ReportCar__Stude__6383C8BA">
+  <Association Name="FK__ReportCar__Stude__778AC167">
     <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
     <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
     <ReferentialConstraint>
@@ -121,7 +122,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ReportCar__Subje__6477ECF3">
+  <Association Name="FK__ReportCar__Subje__787EE5A0">
     <End Role="TestSubject" Type="Self.TestSubject" Multiplicity="0..1" />
     <End Role="ReportCard" Type="Self.ReportCard" Multiplicity="*" />
     <ReferentialConstraint>
@@ -133,10 +134,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="allevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="allreport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="fectchStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="fetchLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="fetchqusn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="fetchSubject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="MyLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="sid" Type="int" Mode="In" />
+  </Function>
+  <Function Name="myReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="sid" Type="int" Mode="In" />
+  </Function>
   <Function Name="sp_UpdateLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Lid" Type="int" Mode="In" />
     <Parameter Name="Level" Type="int" Mode="In" />
@@ -145,6 +154,15 @@
     <Parameter Name="otp" Type="varchar" Mode="In" />
     <Parameter Name="Password" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="sp_UpdateSubject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SubjectId" Type="int" Mode="In" />
+    <Parameter Name="Subject" Type="varchar" Mode="In" />
+    <Parameter Name="TotalMark" Type="int" Mode="In" />
+    <Parameter Name="PassingMark" Type="int" Mode="In" />
+    <Parameter Name="ExamDuration" Type="int" Mode="In" />
+    <Parameter Name="TStatus" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="unique_file_sp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="OnlineExamModelStoreContainer">
     <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LevelTable" EntityType="Self.LevelTable" Schema="dbo" store:Type="Tables" />
@@ -164,11 +182,11 @@
       <End Role="TestSubject" EntitySet="TestSubject" />
       <End Role="Question" EntitySet="Question" />
     </AssociationSet>
-    <AssociationSet Name="FK__ReportCar__Stude__6383C8BA" Association="Self.FK__ReportCar__Stude__6383C8BA">
+    <AssociationSet Name="FK__ReportCar__Stude__778AC167" Association="Self.FK__ReportCar__Stude__778AC167">
       <End Role="Student" EntitySet="Student" />
       <End Role="ReportCard" EntitySet="ReportCard" />
     </AssociationSet>
-    <AssociationSet Name="FK__ReportCar__Subje__6477ECF3" Association="Self.FK__ReportCar__Subje__6477ECF3">
+    <AssociationSet Name="FK__ReportCar__Subje__787EE5A0" Association="Self.FK__ReportCar__Subje__787EE5A0">
       <End Role="TestSubject" EntitySet="TestSubject" />
       <End Role="ReportCard" EntitySet="ReportCard" />
     </AssociationSet>

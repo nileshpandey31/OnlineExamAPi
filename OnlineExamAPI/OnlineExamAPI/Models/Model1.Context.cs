@@ -16,10 +16,10 @@ namespace OnlineExamAPI.Models
     using System.Data.Objects.DataClasses;
     using System.Linq;
     
-    public partial class OnlineExamEntities12 : DbContext
+    public partial class OnlineExamEntities13 : DbContext
     {
-        public OnlineExamEntities12()
-            : base("name=OnlineExamEntities12")
+        public OnlineExamEntities13()
+            : base("name=OnlineExamEntities13")
         {
         }
     
@@ -55,6 +55,15 @@ namespace OnlineExamAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<fetchSubject_Result>("fetchSubject");
         }
     
+        public virtual ObjectResult<myReport_Result> myReport(Nullable<int> sid)
+        {
+            var sidParameter = sid.HasValue ?
+                new ObjectParameter("sid", sid) :
+                new ObjectParameter("sid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<myReport_Result>("myReport", sidParameter);
+        }
+    
         public virtual int sp_UpdateLevel(Nullable<int> lid, Nullable<int> level)
         {
             var lidParameter = lid.HasValue ?
@@ -79,6 +88,59 @@ namespace OnlineExamAPI.Models
                 new ObjectParameter("Password", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_UpdatePassword", otpParameter, passwordParameter);
+        }
+    
+        public virtual ObjectResult<MyLevel_Result> MyLevel(Nullable<int> sid)
+        {
+            var sidParameter = sid.HasValue ?
+                new ObjectParameter("sid", sid) :
+                new ObjectParameter("sid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MyLevel_Result>("MyLevel", sidParameter);
+        }
+    
+        public virtual ObjectResult<allevel_Result> allevel()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<allevel_Result>("allevel");
+        }
+    
+        public virtual ObjectResult<allreport_Result> allreport()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<allreport_Result>("allreport");
+        }
+    
+        public virtual ObjectResult<unique_file_sp_Result> unique_file_sp()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<unique_file_sp_Result>("unique_file_sp");
+        }
+    
+        public virtual int sp_UpdateSubject(Nullable<int> subjectId, string subject, Nullable<int> totalMark, Nullable<int> passingMark, Nullable<int> examDuration, string tStatus)
+        {
+            var subjectIdParameter = subjectId.HasValue ?
+                new ObjectParameter("SubjectId", subjectId) :
+                new ObjectParameter("SubjectId", typeof(int));
+    
+            var subjectParameter = subject != null ?
+                new ObjectParameter("Subject", subject) :
+                new ObjectParameter("Subject", typeof(string));
+    
+            var totalMarkParameter = totalMark.HasValue ?
+                new ObjectParameter("TotalMark", totalMark) :
+                new ObjectParameter("TotalMark", typeof(int));
+    
+            var passingMarkParameter = passingMark.HasValue ?
+                new ObjectParameter("PassingMark", passingMark) :
+                new ObjectParameter("PassingMark", typeof(int));
+    
+            var examDurationParameter = examDuration.HasValue ?
+                new ObjectParameter("ExamDuration", examDuration) :
+                new ObjectParameter("ExamDuration", typeof(int));
+    
+            var tStatusParameter = tStatus != null ?
+                new ObjectParameter("TStatus", tStatus) :
+                new ObjectParameter("TStatus", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_UpdateSubject", subjectIdParameter, subjectParameter, totalMarkParameter, passingMarkParameter, examDurationParameter, tStatusParameter);
         }
     }
 }

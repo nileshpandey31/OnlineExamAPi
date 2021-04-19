@@ -27,7 +27,7 @@ namespace OnlineExamAPI.Controllers
 
     public class StudentAPIController : ApiController
     {
-        OnlineExamEntities12 db = new OnlineExamEntities12();   //db instance
+        OnlineExamEntities13 db = new OnlineExamEntities13();   //db instance
 
         //method to insert student into student table with passwrd encryption
 
@@ -487,6 +487,176 @@ namespace OnlineExamAPI.Controllers
             }
             return 0;     
         }
+
+        //method to fetch level
+        [Route("api/StudentAPI/MyReport/{sid}")]
+        [HttpGet]
+
+        public IEnumerable<myReport_Result> MyReport(int sid)      // will return list of Level object
+        {
+            try
+            {
+                var data = db.myReport(sid);
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //method to fetch Indivdual Report
+        [Route("api/StudentAPI/MyLevel/{sid}")]
+        [HttpGet]
+
+        public IEnumerable<MyLevel_Result> MyLevel(int sid)      // level n subject name
+        {
+            try
+            {
+                var data = db.MyLevel(sid);
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //method to fetch all student Report
+        [Route("api/StudentAPI/AllReport")]
+        [HttpGet]
+
+        public IEnumerable<allreport_Result> AllReport()      // all reports
+        {
+            try
+            {
+                var data = db.allreport();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //method to all student level Report
+        [Route("api/StudentAPI/Allevel")]
+        [HttpGet]
+
+        public IEnumerable<allevel_Result> Allevel()      // level n subject name
+        {
+            try
+            {
+                var data = db.allevel();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //for deleting qusn based on filename
+        [Route("api/StudentAPI/DeleteQuestion/{id}")]
+        [HttpDelete]
+        public bool Delete(int id)
+        {
+            try
+            {
+
+
+                var del = db.Questions.Where(x => x.SubjectId == id).ToList();
+                Console.WriteLine(del);
+
+                if (del == null)
+                    throw new Exception("file name cannot be found");
+                else
+                {
+                    foreach (var i in del)
+                    {
+                        db.Questions.Remove(i);
+                    }
+
+                    var res = db.SaveChanges();
+                    if (res > 0)
+                        return true;
+                    Console.WriteLine(true);
+                }
+
+            }
+            catch (Exception ex)
+
+            {
+                throw ex;
+            }
+            return false;
+           
+        }
+
+        //fetch unique fle name
+        [Route("api/StudentAPI/ShowUQst")]
+        [HttpGet]
+
+        public IEnumerable<unique_file_sp_Result> ShowUQut()      // will return list of Quesn object
+        {
+            try
+            {
+                var Qsn = db.unique_file_sp();
+                return Qsn;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //method to update subject
+        [Route("api/StudentAPI/UpdateSubject/{id}")]
+        [HttpPut]
+        public bool Put(int? id, [FromBody] TestSubject subjinfo)
+        {
+            try
+            {
+                int res = db.sp_UpdateSubject(id, subjinfo.Subject, subjinfo.TotalMark, subjinfo.PassingMark, subjinfo.ExamDuration, subjinfo.TStatus);
+                if (res > 0)
+                    return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return false;
+        }
+
+        [Route("api/StudentAPI/DeleteSubject/{id}")]
+        [HttpDelete]
+        public bool DeleteSubject(int id)
+        {
+            try
+            {
+                //var del =  from L in db.LevelTables
+                //              join Q in db.Questions
+                //              join R in db.ReportCards
+                //              join TF in db.TestFiles
+                //              join TS in db.TestSubjects.Where(x => x.SubjectId == id).SingleOrDefault();
+                var del = db.TestSubjects.Where(x => x.SubjectId == id).SingleOrDefault();
+                if (del == null)
+                    throw new Exception(" ID cannot be null");
+                else
+                {
+                    db.TestSubjects.Remove(del);
+                    var res = db.SaveChanges();
+                    if (res > 0)
+                        return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return false;
+        }
+
 
     }
     
