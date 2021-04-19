@@ -657,6 +657,24 @@ namespace OnlineExamAPI.Controllers
             return false;
         }
 
+        ///method for search student
+        [Route("api/StudentAPI/SelectStudent")]
+        [HttpPost]                                                             // get method for displaying
+        public IEnumerable<sp_searchStudent_Result> SearchStudent(SelectStudent selectStudent)
+        {
+            try
+            {
+                var data = db.sp_searchStudent(selectStudent.Technology, selectStudent.state, selectStudent.city, selectStudent.Level, selectStudent.marks).ToList();
+
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
     }
     

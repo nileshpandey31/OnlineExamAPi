@@ -142,5 +142,30 @@ namespace OnlineExamAPI.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_UpdateSubject", subjectIdParameter, subjectParameter, totalMarkParameter, passingMarkParameter, examDurationParameter, tStatusParameter);
         }
+    
+        public virtual ObjectResult<sp_searchStudent_Result> sp_searchStudent(string subject, string state, string city, Nullable<int> level, Nullable<int> marks)
+        {
+            var subjectParameter = subject != null ?
+                new ObjectParameter("subject", subject) :
+                new ObjectParameter("subject", typeof(string));
+    
+            var stateParameter = state != null ?
+                new ObjectParameter("state", state) :
+                new ObjectParameter("state", typeof(string));
+    
+            var cityParameter = city != null ?
+                new ObjectParameter("city", city) :
+                new ObjectParameter("city", typeof(string));
+    
+            var levelParameter = level.HasValue ?
+                new ObjectParameter("Level", level) :
+                new ObjectParameter("Level", typeof(int));
+    
+            var marksParameter = marks.HasValue ?
+                new ObjectParameter("marks", marks) :
+                new ObjectParameter("marks", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_searchStudent_Result>("sp_searchStudent", subjectParameter, stateParameter, cityParameter, levelParameter, marksParameter);
+        }
     }
 }

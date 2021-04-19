@@ -146,6 +146,13 @@
   <Function Name="myReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="sid" Type="int" Mode="In" />
   </Function>
+  <Function Name="sp_searchStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="subject" Type="varchar" Mode="In" />
+    <Parameter Name="state" Type="varchar" Mode="In" />
+    <Parameter Name="city" Type="varchar" Mode="In" />
+    <Parameter Name="Level" Type="int" Mode="In" />
+    <Parameter Name="marks" Type="int" Mode="In" />
+  </Function>
   <Function Name="sp_UpdateLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Lid" Type="int" Mode="In" />
     <Parameter Name="Level" Type="int" Mode="In" />

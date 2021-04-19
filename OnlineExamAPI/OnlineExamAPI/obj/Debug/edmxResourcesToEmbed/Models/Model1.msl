@@ -188,5 +188,17 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_UpdateSubject" FunctionName="OnlineExamModel.Store.sp_UpdateSubject" />
+    <FunctionImportMapping FunctionImportName="sp_searchStudent" FunctionName="OnlineExamModel.Store.sp_searchStudent">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OnlineExamModel.sp_searchStudent_Result">
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+          <ScalarProperty Name="Marks" ColumnName="Marks" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

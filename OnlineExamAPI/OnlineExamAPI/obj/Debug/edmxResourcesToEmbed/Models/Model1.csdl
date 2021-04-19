@@ -200,6 +200,13 @@
       <Parameter Name="ExamDuration" Mode="In" Type="Int32" />
       <Parameter Name="TStatus" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="sp_searchStudent" ReturnType="Collection(OnlineExamModel.sp_searchStudent_Result)">
+      <Parameter Name="subject" Mode="In" Type="String" />
+      <Parameter Name="state" Mode="In" Type="String" />
+      <Parameter Name="city" Mode="In" Type="String" />
+      <Parameter Name="Level" Mode="In" Type="Int32" />
+      <Parameter Name="marks" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="fectchStudent_Result">
     <Property Type="Int32" Name="StudentId" Nullable="false" />
@@ -268,5 +275,13 @@
   <ComplexType Name="unique_file_sp_Result">
     <Property Type="String" Name="FileName" Nullable="true" MaxLength="30" />
     <Property Type="Int32" Name="SubjectId" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_searchStudent_Result">
+    <Property Type="Int32" Name="StudentId" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+    <Property Type="String" Name="Email" Nullable="true" MaxLength="40" />
+    <Property Type="String" Name="Subject" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="Level" Nullable="true" />
+    <Property Type="Int32" Name="Marks" Nullable="true" />
   </ComplexType>
 </Schema>

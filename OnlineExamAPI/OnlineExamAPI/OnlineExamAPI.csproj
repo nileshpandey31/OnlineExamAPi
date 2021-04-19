@@ -169,6 +169,10 @@
     <Compile Include="Models\ReportCard.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SelectStudent.cs" />
+    <Compile Include="Models\sp_searchStudent_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Student.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
