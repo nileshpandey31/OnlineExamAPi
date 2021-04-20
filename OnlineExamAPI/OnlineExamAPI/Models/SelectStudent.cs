@@ -8,11 +8,25 @@ namespace OnlineExamAPI.Models
    
         public class SelectStudent
         {
-            public string Technology { get; set; }
-            public string state { get; set; }
-            public string city { get; set; }
-            public int? Level { get; set; }
-            public int? marks { get; set; }
+        public string Technology;
+        public string state;
+        public string city;
+        public int? Level;
+        public int? marks;
+        public SelectStudent()
+        { 
+        
+                this.Technology = null;
+            this.state = null; ;
+                this.city = null;
+                this.Level= 0;
+                this.marks = 0;
         }
+               
+                }
+          
+    
+
+        
     
 }
