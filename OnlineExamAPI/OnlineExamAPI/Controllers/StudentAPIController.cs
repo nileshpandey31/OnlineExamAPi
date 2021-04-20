@@ -14,6 +14,8 @@ using System.Text;
 using System.Net.Mail;
 using System.Runtime;
 
+using OnlineExamAPI.RSA;
+
 namespace OnlineExamAPI.Controllers
 {
     static class GlobalText    // global variable jugaad
@@ -38,8 +40,12 @@ namespace OnlineExamAPI.Controllers
             try
             {
                 // Console.WriteLine(stud.Password);
+                var rsa = new RsaHelper();
 
-                stud.Password = Convert.ToBase64String(System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(stud.Password)));
+                var clearTextPassword = rsa.Decrypt(stud.Password);
+
+                stud.Password = Convert.ToBase64String
+                    (System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(clearTextPassword)));
                 var result = db.Students.Add(stud);
                 // Console.WriteLine(stud.Password);
                 var res = db.SaveChanges();
@@ -56,16 +62,21 @@ namespace OnlineExamAPI.Controllers
 
         //method for login validation
 
-        [Route("api/StudentAPI/Login/{email}/{pwd}")]
-        [HttpGet]
-        public string Get(string email, string pwd)
+        [Route("api/StudentAPI/Login")]
+        [HttpPost]
+        public string Post([FromBody] Container container)
         {
             string result = "";
+            var rsa = new RsaHelper();
+
             try
             {
-                pwd = Convert.ToBase64String
-                    (System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(pwd)));
-                var data = db.Students.Where(x => x.Email == email && x.Password == pwd);
+                var clearTextPassword = rsa.Decrypt(container.password);
+
+                clearTextPassword = Convert.ToBase64String
+                    (System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(clearTextPassword)));
+
+                var data = db.Students.Where(x => x.Email == container.email && x.Password == clearTextPassword);
                 if (data.Count() == 0)
                     result = "Invalid credentials";
                 else
